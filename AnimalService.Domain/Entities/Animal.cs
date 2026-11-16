@@ -28,10 +28,10 @@ public class Animal : BaseEntity
         if (!Enum.IsDefined(color))
             throw new DomainValidationException("Invalid animal color.");
 
-        if (age < 0)
+        if (age < 0 || age == int.MaxValue)
             throw new DomainValidationException($"Animal age cannot be negative. Input number was {age}.");
 
-        if (weight <= 0 || double.IsNaN(weight) || double.IsInfinity(weight))
+        if (weight <= 0 || double.IsNaN(weight) || double.IsInfinity(weight) || Math.Abs(weight - double.MaxValue) < 1)
             throw new DomainValidationException($"Weight of animal must be positive double number. Input number was {weight}.");
 
         return new()
