@@ -1,5 +1,5 @@
 @baseUrl = https://localhost:7215
-@token = TO_BE_SET
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6Ijk4NmUwZDU1LTEwMWYtNGVlYS04NTRmLTNlYjA3N2IwZDQyNCIsImV4cCI6MTc5NDg1MDMyNSwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.i62BU4Oq1tmEoYZV6B6RCBy9QrjZ_HbAinFoqfw5Loc
 
 ### ==========================================
 ### USER SERVICE
@@ -35,16 +35,16 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "AnimalName",
+  "name": "Ship",
   "age": 12,
   "weight": 43.5,
   "gender": "Female",
   "color": "White",
-  "Language": "En"
+  "Language": 0
 }
 
 ### 4. Get all animals
-GET {{baseUrl}}/api/animal?Page=1&PageSize=10&Count=0&IncludeClosed=false&Colors=Black&Colors=White&MinAge=1&MaxAge=15&MinWeight=2&MaxWeight=100&Gender=Male&Language=English
+GET {{baseUrl}}/api/animal?Page=1&PageSize=10&Count=10&Language=1
 Authorization: Bearer {{token}}
 
 ### 5. Update animal
@@ -59,7 +59,7 @@ Content-Type: application/json
   "weight": 18.5,
   "color": "Brown",
   "gender": "Male",
-  "selectedLanguage": "English"
+  "selectedLanguage": 0
 }
 
 
@@ -72,13 +72,13 @@ Authorization: Bearer {{token}}
 ### ==========================================
 
 ### 7. Get all translations for a language
-GET {{baseUrl}}/api/translation?language=English
+GET {{baseUrl}}/api/translation?language=0
 Authorization: Bearer {{token}}
 
 ### 8. Get translations for a specific enum type
-GET {{baseUrl}}/api/translation/AnimalType/translations/English
+GET {{baseUrl}}/api/translation/Language/translations/0
 Authorization: Bearer {{token}}
 
 ### 9. Get enum code by translation
-GET {{baseUrl}}/api/translation/AnimalType/code?translation=Dog
+GET {{baseUrl}}/api/translation/Language/code?translation=Armenian
 Authorization: Bearer {{token}}

@@ -11,7 +11,7 @@ public sealed class TranslationServiceClient(HttpClient httpClient) : ITranslati
         string enumType, Language language)
     {
         var response = await httpClient.GetFromJsonAsync<GetEnumTypeTranslationsResponse>(
-            $"api/translation/{Uri.EscapeDataString(enumType)}/translations/{language}");
+            $"api/translation/{Uri.EscapeDataString(enumType)}/translations/{(int)language}");
 
         if (response is null)
             throw new NotImplementedException();

@@ -62,11 +62,5 @@ public class GetAllAnimalsRequestValidator : AbstractValidator<GetAllAnimalsRequ
                             (Enum.TryParse<Gender>(gender, true, out var parsed)
                              && Enum.IsDefined(parsed)))
             .WithMessage("Invalid gender.");
-        
-        RuleFor(x => x.Language)
-            .NotEmpty()
-            .Must(x => Enum.TryParse<Language>(x, true, out var value)
-                       && Enum.IsDefined(value))
-            .WithMessage("Language must be a valid language (Eng or Arm).");
     }
 }

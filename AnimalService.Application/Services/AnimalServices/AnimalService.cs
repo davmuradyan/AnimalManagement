@@ -6,6 +6,7 @@ using AnimalService.Domain.Contracts.Dtos;
 using AnimalService.Domain.Contracts.Requests.AnimalRequests;
 using AnimalService.Domain.Entities;
 using AnimalService.Domain.HelperClasses;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +16,7 @@ public sealed class AnimalService(
     IValidator<CreateAnimalRequest> createAnimalRequestValidator,
     IValidator<GetAllAnimalsRequest> getAllAnimalsRequestValidator,
     IValidator<UpdateAnimalRequest> updateAnimalRequestValidator,
+    IMapper mapper,
     IAnimalRepository animalRepository,
     ITranslationService translationService,
     ILogger<AnimalService> logger) : IAnimalService
@@ -32,10 +34,9 @@ public sealed class AnimalService(
             }
             return ErrorOr<AnimalDto>.Failure(validation.Errors[0].ErrorMessage, ErrorType.Validation);
         }
-        
+
+        var language = !Enum.IsDefined((Language)request.Language) ? Language.Eng : (Language)request.Language;
         // Main implementation
-        if (!Enum.TryParse<Language>(request.Language, out var language) || !Enum.IsDefined(typeof(Language), language))
-            language = Language.Eng;
 
         var genderColor = await ConvertToGenderAndColor(request.Gender, request.Color, language);
 
@@ -54,7 +55,7 @@ public sealed class AnimalService(
         await animalRepository.Create(animal);
         
         // Response
-        return ErrorOr<AnimalDto>.Success(animal.MapToAnimalDto(request.Gender, request.Color));
+        return ErrorOr<AnimalDto>.Success(mapper.Map<AnimalDto>(animal));
     }
 
     public async Task<ErrorOr<List<AnimalDto>>> GetAll(GetAllAnimalsRequest request)
@@ -91,10 +92,7 @@ public sealed class AnimalService(
             pageSize: request.PageSize,
             args: args);
         
-        if (!Enum.TryParse<Language>(request.Language, out var language) || !Enum.IsDefined(typeof(Language), language))
-        {
-            language = Language.Eng;
-        }
+        var language = !Enum.IsDefined((Language)request.Language) ? Language.Eng : (Language)request.Language;
 
         var colors = await translationService.GetEnumTypeTranslations(nameof(Color), language);
         var genders = await translationService.GetEnumTypeTranslations(nameof(Gender), language);
@@ -103,7 +101,7 @@ public sealed class AnimalService(
         {
             string gender = a.Gender == 0 ? genders[0].Item2 : genders[1].Item2;
             string color = colors.First(c => c.Item1 == (int)a.Color).Item2;
-            return a.MapToAnimalDto(gender, color);
+            return mapper.Map<AnimalDto>(a);
         }).ToList();
         return ErrorOr<List<AnimalDto>>.Success(result);
     }
@@ -128,8 +126,7 @@ public sealed class AnimalService(
             return ErrorOr<AnimalDto>.Failure($"Animal with id {request.Id} doesn't exist.", ErrorType.NotFound);
 
         // Main implementation
-        if (!Enum.TryParse<Language>(request.SelectedLanguage, out var language) || !Enum.IsDefined(typeof(Language), language))
-            language = Language.Eng;
+        var language = !Enum.IsDefined((Language)request.SelectedLanguage) ? Language.Eng : (Language)request.SelectedLanguage;
 
         var genderColor = await ConvertToGenderAndColor(request.Gender, request.Color, language);
 
@@ -142,7 +139,7 @@ public sealed class AnimalService(
         await animalRepository.Update(animal);
 
         // Response
-        return ErrorOr<AnimalDto>.Success(animal.MapToAnimalDto(request.Gender, request.Color));
+        return ErrorOr<AnimalDto>.Success(mapper.Map<AnimalDto>(animal));
     }
 
     public async Task<ErrorOr<bool>> SoftDelete(int id)

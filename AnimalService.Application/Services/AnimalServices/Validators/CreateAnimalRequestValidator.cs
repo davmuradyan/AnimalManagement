@@ -35,11 +35,5 @@ public class CreateAnimalRequestValidator
             .Must(x => Enum.TryParse<Color>(x, true, out var value)
                        && Enum.IsDefined(value))
             .WithMessage("Color must be a valid color.");
-        
-        RuleFor(x => x.Language)
-            .NotEmpty()
-            .Must(x => Enum.TryParse<Language>(x, true, out var value)
-                && Enum.IsDefined(value))
-            .WithMessage("Language must be a valid language (Eng or Arm).");
     }
 }

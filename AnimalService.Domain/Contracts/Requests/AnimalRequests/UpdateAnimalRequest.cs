@@ -8,5 +8,5 @@ public record UpdateAnimalRequest
     public double Weight { get; set; }
     public string Color { get; set; } = null!;
     public string Gender { get; set; } = null!;
-    public string SelectedLanguage { get; set; } = null!;
+    public int SelectedLanguage { get; set; }
 }

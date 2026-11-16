@@ -9,15 +9,17 @@ namespace TranslationService.Application.Services.TranslationServices;
 public class TranslationService(ITranslationRepository translationRepository,
     ILogger<TranslationService> logger) : ITranslationService
 {
-    public async Task<GetEnumTypeTranslationsResponse> GetEnumTypeTranslations(string selectedEnumType, string selectedLanguage)
+    public async Task<GetEnumTypeTranslationsResponse> GetEnumTypeTranslations(string selectedEnumType, int selectedLanguage)
     {
         // Validation
-        if (!Enum.TryParse<Language>(selectedLanguage, out var language) || !Enum.IsDefined(language))
+        if (!Enum.IsDefined((Language)selectedLanguage))
         {
             logger.LogError($"Invalid language {selectedLanguage}");
             ErrorOr<GetAllTranslationsResponse>.Failure($"Selected language {selectedLanguage} is not valid.",
                 ErrorType.Validation);
         }
+
+        Language language = (Language)selectedLanguage;
         
         if (!Enum.TryParse<TranslationTypes>(selectedEnumType, out var enumType) || !Enum.IsDefined(enumType))
         {
@@ -45,16 +47,18 @@ public class TranslationService(ITranslationRepository translationRepository,
         return result;
     }
 
-    public async Task<ErrorOr<GetAllTranslationsResponse>> GetAllTranslations(string selectedLanguage)
+    public async Task<ErrorOr<GetAllTranslationsResponse>> GetAllTranslations(int selectedLanguage)
     {
         // Validation
-        if (!Enum.TryParse<Language>(selectedLanguage, out var language) || !Enum.IsDefined(language))
+        if (!Enum.IsDefined((Language)selectedLanguage))
         {
             logger.LogError($"Invalid language {selectedLanguage}");
             ErrorOr<GetAllTranslationsResponse>.Failure($"Selected language {selectedLanguage} is not valid.",
                 ErrorType.Validation);
         }
 
+        Language language = (Language)selectedLanguage;
+        
         // Main implementation
         var result = await translationRepository.GetAllEnumTypes(language);
 

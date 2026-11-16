@@ -9,7 +9,7 @@ namespace TranslationService.Api.Controllers;
 public class TranslationController(ITranslationService service) : ControllerBase
 {
     [HttpGet("")]
-    public async Task<IActionResult> GetAllTranslations(string language)
+    public async Task<IActionResult> GetAllTranslations(int language)
     {
         var result = await service.GetAllTranslations(language);
 
@@ -18,7 +18,7 @@ public class TranslationController(ITranslationService service) : ControllerBase
 
     [HttpGet("{enumType}/translations/{language}")]
     public async Task<IActionResult> GetEnumTypeTranslations(
-        string enumType, string language)
+        string enumType, int language)
     {
         var result = await service.GetEnumTypeTranslations(enumType, language);
         return Ok(result);

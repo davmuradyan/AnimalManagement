@@ -64,19 +64,22 @@ public class EnumTranslationConfiguration
             });
         }
 
-        Add(nameof(Color), (int)Color.Red, "Red", "Կարմիր");
-        Add(nameof(Color), (int)Color.Green, "Green", "Կանաչ");
-        Add(nameof(Color), (int)Color.Blue, "Blue", "Կապույտ");
-        Add(nameof(Color), (int)Color.Yellow, "Yellow", "Դեղին");
-        Add(nameof(Color), (int)Color.Orange, "Orange", "Նարնջագույն");
-        Add(nameof(Color), (int)Color.Purple, "Purple", "Մանուշակագույն");
-        Add(nameof(Color), (int)Color.Pink, "Pink", "Վարդագույն");
-        Add(nameof(Color), (int)Color.Black, "Black", "Սև");
-        Add(nameof(Color), (int)Color.White, "White", "Սպիտակ");
-        Add(nameof(Color), (int)Color.Brown, "Brown", "Շագանակագույն");
+        Add(nameof(TranslationTypes.Color), (int)Color.Red, "Red", "Կարմիր");
+        Add(nameof(TranslationTypes.Color), (int)Color.Green, "Green", "Կանաչ");
+        Add(nameof(TranslationTypes.Color), (int)Color.Blue, "Blue", "Կապույտ");
+        Add(nameof(TranslationTypes.Color), (int)Color.Yellow, "Yellow", "Դեղին");
+        Add(nameof(TranslationTypes.Color), (int)Color.Orange, "Orange", "Նարնջագույն");
+        Add(nameof(TranslationTypes.Color), (int)Color.Purple, "Purple", "Մանուշակագույն");
+        Add(nameof(TranslationTypes.Color), (int)Color.Pink, "Pink", "Վարդագույն");
+        Add(nameof(TranslationTypes.Color), (int)Color.Black, "Black", "Սև");
+        Add(nameof(TranslationTypes.Color), (int)Color.White, "White", "Սպիտակ");
+        Add(nameof(TranslationTypes.Color), (int)Color.Brown, "Brown", "Շագանակագույն");
 
-        Add(nameof(Gender), (int)Gender.Male, "Male", "Արու");
-        Add(nameof(Gender), (int)Gender.Female, "Female", "Էգ");
+        Add(nameof(TranslationTypes.Gender), (int)Gender.Male, "Male", "Արու");
+        Add(nameof(TranslationTypes.Gender), (int)Gender.Female, "Female", "Էգ");
+        
+        Add(nameof(TranslationTypes.Language), (int)Language.Eng, "English", "Անգլերեն");
+        Add(nameof(TranslationTypes.Language), (int)Language.Hy, "Armenian", "Հայերեն");
 
         return result;
     }
