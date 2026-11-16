@@ -1,0 +1,84 @@
+@baseUrl = https://localhost:7215
+@token = TO_BE_SET
+
+### ==========================================
+### USER SERVICE
+### ==========================================
+
+### 1. Register
+POST {{baseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "name": "Hayk",
+  "surname": "Adamyan",
+  "username": "hayk-arca",
+  "password": "TestPassword123!"
+}
+
+### 2. Login
+POST {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test1234567!"
+}
+
+### ==========================================
+### ANIMAL SERVICE
+### ==========================================
+
+### 3. Create animal
+POST {{baseUrl}}/api/animal
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "AnimalName",
+  "age": 12,
+  "weight": 43.5,
+  "gender": "Female",
+  "color": "White",
+  "Language": "En"
+}
+
+### 4. Get all animals
+GET {{baseUrl}}/api/animal?Page=1&PageSize=10&Count=0&IncludeClosed=false&Colors=Black&Colors=White&MinAge=1&MaxAge=15&MinWeight=2&MaxWeight=100&Gender=Male&Language=English
+Authorization: Bearer {{token}}
+
+### 5. Update animal
+PUT {{baseUrl}}/api/animal
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Buddy",
+  "age": 5,
+  "weight": 18.5,
+  "color": "Brown",
+  "gender": "Male",
+  "selectedLanguage": "English"
+}
+
+
+### 6. Soft delete animal
+DELETE {{baseUrl}}/api/animal/1/soft
+Authorization: Bearer {{token}}
+
+### ==========================================
+### TRANSLATION SERVICE
+### ==========================================
+
+### 7. Get all translations for a language
+GET {{baseUrl}}/api/translation?language=English
+Authorization: Bearer {{token}}
+
+### 8. Get translations for a specific enum type
+GET {{baseUrl}}/api/translation/AnimalType/translations/English
+Authorization: Bearer {{token}}
+
+### 9. Get enum code by translation
+GET {{baseUrl}}/api/translation/AnimalType/code?translation=Dog
+Authorization: Bearer {{token}}

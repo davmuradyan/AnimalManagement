@@ -1,0 +1,107 @@
+﻿[
+  {
+    "name": "Cat",
+    "age": 2,
+    "weight": 4.5,
+    "gender": "Female",
+    "color": "White"
+  },
+  {
+    "name": "Horse",
+    "age": 7,
+    "weight": 450,
+    "gender": "Male",
+    "color": "Brown"
+  },
+  {
+    "name": "Sheep",
+    "age": 4,
+    "weight": 65,
+    "gender": "Female",
+    "color": "White"
+  },
+  {
+    "name": "Goat",
+    "age": 3,
+    "weight": 55,
+    "gender": "Male",
+    "color": "Black"
+  },
+  {
+    "name": "Rabbit",
+    "age": 1,
+    "weight": 2.2,
+    "gender": "Female",
+    "color": "Black"
+  },
+  {
+    "name": "Pig",
+    "age": 5,
+    "weight": 120,
+    "gender": "Male",
+    "color": "Pink"
+  },
+  {
+    "name": "Chicken",
+    "age": 2,
+    "weight": 2.5,
+    "gender": "Female",
+    "color": "Yellow"
+  },
+  {
+    "name": "Duck",
+    "age": 1,
+    "weight": 3.2,
+    "gender": "Male",
+    "color": "White"
+  },
+  {
+    "name": "Lion",
+    "age": 8,
+    "weight": 190,
+    "gender": "Male",
+    "color": "Orange"
+  },
+  {
+    "name": "Tiger",
+    "age": 6,
+    "weight": 220,
+    "gender": "Female",
+    "color": "Orange"
+  },
+  {
+    "name": "Elephant",
+    "age": 25,
+    "weight": 4500,
+    "gender": "Female",
+    "color": "Black"
+  },
+  {
+    "name": "Wolf",
+    "age": 5,
+    "weight": 45,
+    "gender": "Male",
+    "color": "Black"
+  },
+  {
+    "name": "Fox",
+    "age": 3,
+    "weight": 8,
+    "gender": "Female",
+    "color": "Orange"
+  },
+  {
+    "name": "Bear",
+    "age": 12,
+    "weight": 350,
+    "gender": "Male",
+    "color": "Brown"
+  },
+  {
+    "name": "Deer",
+    "age": 4,
+    "weight": 90,
+    "gender": "Female",
+    "color": "Brown"
+  }
+]
