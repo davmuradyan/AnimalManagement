@@ -1,18 +1,15 @@
 ﻿using UserService.Application.Interfaces.Tokens;
-using UserService.Domain.Configurations;
 using UserService.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using UserService.Domain.Configs;
 
 namespace UserService.Infrastructure.Implementations.Tokens;
 
-public class JwtTokenGenerator(IOptions<JwtOptions> options) : IJwtTokenGenerator
+public class JwtTokenGenerator(Jwt options) : IJwtTokenGenerator
 {
-    private readonly JwtOptions _options = options.Value;
-
     public string GenerateToken(User user)
     {
         var claims = new List<Claim>
@@ -22,15 +19,15 @@ public class JwtTokenGenerator(IOptions<JwtOptions> options) : IJwtTokenGenerato
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.SecretKey));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var expires = DateTime.UtcNow.AddMinutes(_options.ExpirationInMinutes);
+        var expires = DateTime.UtcNow.AddMinutes(options.ExpirationInMinutes);
 
         var token = new JwtSecurityToken(
-            issuer: _options.Issuer,
-            audience: _options.Audience,
+            issuer: options.Issuer,
+            audience: options.Audience,
             claims: claims,
             expires: expires,
             signingCredentials: credentials);

@@ -1,19 +1,37 @@
 using System.Text;
+using Admin.Api.Configs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using UserService.Domain.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration.Get<Configuration>();
+
+if (configuration is null)
+{
+    Console.Error.WriteLine("No configuration found");
+    return;
+}
+
+var routes = configuration.ReverseProxy.Routes
+    .Select(x => x.Value with { RouteId = x.Key })
+    .ToList();
+
+var clusters = configuration.ReverseProxy.Clusters
+    .Select(x => x.Value with
+    {
+        ClusterId = x.Key,
+        Destinations = x.Value.Destinations
+    })
+    .ToList();
+
 builder.Services
-    .AddReverseProxy()
-    .LoadFromConfig(
-        builder.Configuration.GetSection("ReverseProxy"));
+    .AddReverseProxy().LoadFromMemory(routes, clusters);
 
 var jwtSettings = builder.Configuration
     .GetSection("Jwt")
-    .Get<JwtOptions>()!;
+    .Get<Jwt>()!;
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

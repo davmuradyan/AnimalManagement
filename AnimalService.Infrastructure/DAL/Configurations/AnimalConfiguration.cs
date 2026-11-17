@@ -14,7 +14,7 @@ public class AnimalConfiguration : IEntityTypeConfiguration<Animal>
             .ValueGeneratedOnAdd();
 
         builder.Property(a => a.Name)
-            .HasConversion<string>();
+            .IsRequired();
 
         builder.Property(a => a.Color)
             .HasConversion<string>();
@@ -26,7 +26,7 @@ public class AnimalConfiguration : IEntityTypeConfiguration<Animal>
 
         builder.ToTable(t => t.HasCheckConstraint("CK_Animal_Weight", "[Weight] > 0"));
 
-        builder.ToTable(t => t.HasCheckConstraint("CK_Animal_Age", "[Weight] > 0"));
+        builder.ToTable(t => t.HasCheckConstraint("CK_Animal_Age", "[Age] > 0"));
 
         builder.Property(a => a.RowVersion)
             .IsRowVersion();

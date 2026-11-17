@@ -1,9 +1,7 @@
-﻿namespace UserService.Domain.Configurations;
+﻿namespace UserService.Domain.Configs;
 
-public class JwtOptions
+public class Jwt
 {
-    public const string SectionName = "Jwt";
-
     public string SecretKey { get; set; } = string.Empty;
     public string Issuer { get; set; } = string.Empty;
     public string Audience { get; set; } = string.Empty;

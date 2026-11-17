@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UserService.Application.Interfaces.HashFunctions;
 using UserService.Application.Interfaces.Repositories;
 using UserService.Application.Interfaces.Tokens;
-using UserService.Domain.Configurations;
+using UserService.Domain.Configs;
 using UserService.Infrastructure.DAL.Repositories;
 using UserService.Infrastructure.Database;
 using UserService.Infrastructure.Implementations.HashFunctions;
@@ -14,17 +14,16 @@ namespace UserService.Infrastructure.ExtensionMethods;
 
 public static class MainExtensions
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, Configuration configuration)
     {
         services.AddDbContext<MainDbContext>(options =>
-            options.UseSqlServer(
-                configuration.GetConnectionString("MainConnectionString")));
+            options.UseSqlServer(configuration.ConnectionStrings.MainConnectionString));
         
         services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddScoped<IPasswordHashService, BCryptHashService>();
         
-        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+        services.AddSingleton(configuration.Jwt);
 
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         

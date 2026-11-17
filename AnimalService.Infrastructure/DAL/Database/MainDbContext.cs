@@ -9,15 +9,6 @@ namespace AnimalService.Infrastructure.DAL.Database;
 public class MainDbContext(DbContextOptions<MainDbContext> options) : DbContext(options)
 {
     public DbSet<Animal> Animals { get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(
-            options => options.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(10),
-                errorNumbersToAdd: null));
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
