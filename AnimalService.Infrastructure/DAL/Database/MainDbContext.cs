@@ -1,6 +1,6 @@
 ﻿using AnimalService.Domain.Entities;
 using AnimalService.Infrastructure.DAL.Configurations;
-using AnimalService.Infrastructure.DAL.Exceptions;
+using AnimalService.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -24,19 +24,15 @@ public class MainDbContext(DbContextOptions<MainDbContext> options) : DbContext(
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            throw new CustomConcurrencyException("A concurrency error happened.", ex);
+            throw new CustomConcurrencyException("Oops, something went wrong, please retry.", ex);
         }
         catch (RetryLimitExceededException ex)
         {
-            throw new CustomRetryLimitExceededException("There is a problem with SQL Server.", ex);
+            throw new CustomRetryLimitExceededException("Sorry, something went wrong. We are already working on it!", ex);
         }
         catch (DbUpdateException ex)
         {
-            throw new CustomDbUpdateException("An error occurred updating the database", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new CustomException("An error occurred updating the database", ex);
+            throw new CustomDbUpdateException("Oops, something went wrong, please retry.", ex);
         }
     }
 }

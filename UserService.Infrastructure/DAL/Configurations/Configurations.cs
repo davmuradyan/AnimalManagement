@@ -1,16 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UserService.Domain;
 using UserService.Domain.Entities;
-using UserService.Infrastructure.DAL.Configurations;
 
-namespace UserService.Infrastructure.Configurations;
+namespace UserService.Infrastructure.DAL.Configurations;
 
 public static class Configurations
 {
     public static ModelBuilder AddConfigurations(this ModelBuilder modelBuilder)
     {
         new UserConfiguration().Configure(modelBuilder.Entity<User>());
-
+        new RefreshTokenConfiguration().Configure(modelBuilder.Entity<RefreshToken>());
         return modelBuilder;
     }
 }

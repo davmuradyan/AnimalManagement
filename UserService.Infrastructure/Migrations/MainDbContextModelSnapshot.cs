@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UserService.Infrastructure.Database;
+using UserService.Infrastructure.DAL.Database;
 
 #nullable disable
 
@@ -16,7 +16,7 @@ partial class MainDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261115230658_init";
+    public override string LastMigrationId => "20261117194036_addedRefreshToken";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -26,6 +26,46 @@ partial class MainDbContextModelSnapshot : ModelSnapshot
             .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
         SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+        modelBuilder.Entity("UserService.Domain.Entities.RefreshToken", b =>
+            {
+                var id = b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
+
+                b.Property<DateTime>("CreatdAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime>("ExpiresAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime?>("RevokedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<byte[]>("RowVersion")
+                    .IsConcurrencyToken()
+                    .IsRequired()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("rowversion");
+
+                b.Property<string>("TokenHash")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("TokenHash")
+                    .IsUnique();
+
+                b.HasIndex("UserId");
+
+                b.ToTable("RefreshTokens");
+            });
 
         modelBuilder.Entity("UserService.Domain.Entities.User", b =>
             {
@@ -84,6 +124,17 @@ partial class MainDbContextModelSnapshot : ModelSnapshot
                         UpdatedAt = new DateTime(2026, 11, 16, 0, 0, 0, 0, DateTimeKind.Utc),
                         Username = "testuser"
                     });
+            });
+
+        modelBuilder.Entity("UserService.Domain.Entities.RefreshToken", b =>
+            {
+                b.HasOne("UserService.Domain.Entities.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("User");
             });
 #pragma warning restore 612, 618
     }

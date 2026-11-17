@@ -1,6 +1,6 @@
 ﻿using AnimalManagement.Shared.Enums;
 using AnimalService.Domain.Entities.Base;
-using AnimalService.Domain.Exceptions;
+using AnimalService.Domain.Exceptions.Domain;
 
 namespace AnimalService.Domain.Entities;
 
@@ -29,10 +29,10 @@ public class Animal : BaseEntity
             throw new DomainValidationException("Invalid animal color.");
 
         if (age < 0 || age == int.MaxValue)
-            throw new DomainValidationException($"Animal age cannot be negative. Input number was {age}.");
+            throw new DomainValidationException("Invalid animal age.");
 
         if (weight <= 0 || double.IsNaN(weight) || double.IsInfinity(weight) || Math.Abs(weight - double.MaxValue) < 1)
-            throw new DomainValidationException($"Weight of animal must be positive double number. Input number was {weight}.");
+            throw new DomainValidationException("Weight of animal must be positive, non-infinite double number.");
 
         return new()
         {
@@ -57,11 +57,11 @@ public class Animal : BaseEntity
         if (!Enum.IsDefined(color))
             throw new DomainValidationException("Invalid animal color.");
 
-        if (age < 0)
-            throw new DomainValidationException($"Animal age cannot be negative. Input number was {age}.");
+        if (age < 0 || age == int.MaxValue)
+            throw new DomainValidationException("Invalid animal age.");
 
-        if (weight <= 0 || double.IsNaN(weight) || double.IsInfinity(weight))
-            throw new DomainValidationException($"Weight of animal must be positive double number. Input number was {weight}.");
+        if (weight <= 0 || double.IsNaN(weight) || double.IsInfinity(weight) || Math.Abs(weight - double.MaxValue) < 1)
+            throw new DomainValidationException("Weight of animal must be positive, non-infinite double number.");
         
         Name = name;
         Age = age;
@@ -73,7 +73,7 @@ public class Animal : BaseEntity
     public void Close()
     {
         if (ClosedDate.HasValue)
-            throw new DomainValidationException("Animal is already closed.");
+            throw new DomainValidationException("Animal is already deleted.");
 
         var now = DateTime.UtcNow;
 

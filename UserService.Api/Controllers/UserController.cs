@@ -22,4 +22,11 @@ public class UserController(IUserService service) : ControllerBase
         var result = await service.Login(request);
         return this.ErrorOrConverter(result);
     }
+
+    [HttpPost("rotate")]
+    public async Task<IActionResult> Rotate([FromBody] RotateRefreshTokenRequest request)
+    {
+        var result = await service.RotateRefreshToken(request);
+        return Ok(result);
+    }
 }

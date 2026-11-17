@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserService.Application.Interfaces.Repositories;
 using UserService.Domain.Entities;
-using UserService.Infrastructure.Database;
+using UserService.Infrastructure.DAL.Database;
 
 namespace UserService.Infrastructure.DAL.Repositories;
 

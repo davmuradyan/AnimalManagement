@@ -11,8 +11,10 @@ using UserService.Domain.Entities;
 namespace UserService.Application.Services.UserServices;
 
 public class UserService(IUserRepository userRepository,
+    IRefreshTokenRepository refreshTokenRepository,
     IPasswordHashService passwordHasher,
     IJwtTokenGenerator jwtTokenGenerator,
+    IRefreshTokenGenerator refreshTokenGenerator,
     IValidator<CreateUserRequest> createUserRequestValidator,
     IValidator<LoginRequest> loginRequestValidator,
     ILogger<UserService> logger) : IUserService
@@ -49,7 +51,7 @@ public class UserService(IUserRepository userRepository,
     {
         // Validation
         var validation = await loginRequestValidator.ValidateAsync(request);
-        
+
         if (!validation.IsValid)
         {
             foreach (var error in validation.Errors)
@@ -58,7 +60,7 @@ public class UserService(IUserRepository userRepository,
             }
             return ErrorOr<LoginResponse>.Failure(validation.Errors[0].ErrorMessage, ErrorType.Validation);
         }
-        
+
         // Main implementation
         var user = await userRepository.GetByUserName(request.Username);
 
@@ -69,16 +71,50 @@ public class UserService(IUserRepository userRepository,
         }
 
         var result = passwordHasher.Verify(request.Password, user.PasswordHash);
-        
+
         if (!result)
         {
             logger.LogInformation("Failed login attempt with password. Username is \"{username}\".", request.Username);
             return ErrorOr<LoginResponse>.Failure($"Wrong username or password.", ErrorType.Authentication);
         }
-        
+
+        var accessToken = jwtTokenGenerator.GenerateToken(user);
+        var refreshToken = refreshTokenGenerator.Generate();
+        var refreshTokenHash = refreshTokenGenerator.Hash(refreshToken);
+        await refreshTokenRepository.Create(RefreshToken.Create(refreshTokenHash, user.Id));
+
         // Response
-        var token = jwtTokenGenerator.GenerateToken(user);
-        var response = new LoginResponse(token, ExpiresAt: DateTime.UtcNow.AddMinutes(15));
+        var response = new LoginResponse(accessToken, refreshToken);
         return ErrorOr<LoginResponse>.Success(response);
+    }
+
+    public async Task<LoginResponse> RotateRefreshToken(RotateRefreshTokenRequest request)
+    {
+        // Validation
+        if (string.IsNullOrWhiteSpace(request.OldRefreshToken))
+            throw new NotImplementedException();
+        var oldHashTokenHash = refreshTokenGenerator.Hash(request.OldRefreshToken);
+        var oldRefreshTokenEntity = await refreshTokenRepository.Get(oldHashTokenHash);
+        
+        if (oldRefreshTokenEntity is null)
+            throw new NotImplementedException();
+
+        if (oldRefreshTokenEntity.RevokedAt is not null || oldRefreshTokenEntity.ExpiresAt < DateTime.UtcNow)
+            throw new NotImplementedException();
+        
+        if (oldRefreshTokenEntity.User is null)
+            throw new NotImplementedException();
+        
+        // Main implementation
+        var newRefreshToken = refreshTokenGenerator.Generate();
+        var newRefreshTokenHash = refreshTokenGenerator.Hash(newRefreshToken);
+        var newRefreshTokenEntity = RefreshToken.Create(newRefreshTokenHash, oldRefreshTokenEntity.UserId);
+
+        var accessToken = jwtTokenGenerator.GenerateToken(oldRefreshTokenEntity.User);
+        var result = await refreshTokenRepository.TryRotate(oldRefreshTokenEntity, newRefreshTokenEntity);
+        if (!result)
+            throw new NotImplementedException();
+        
+        return new LoginResponse(accessToken, newRefreshToken);
     }
 }

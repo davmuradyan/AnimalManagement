@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using UserService.Domain;
 using UserService.Domain.Entities;
-using UserService.Infrastructure.Configurations;
+using UserService.Infrastructure.DAL.Configurations;
 using UserService.Infrastructure.Exceptions;
 
-namespace UserService.Infrastructure.Database;
+namespace UserService.Infrastructure.DAL.Database;
 
 public class MainDbContext(DbContextOptions<MainDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

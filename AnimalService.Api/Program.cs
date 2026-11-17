@@ -1,9 +1,9 @@
 using AnimalManagement.Shared.Logging;
+using AnimalService.Api.Middlewares;
 using AnimalService.Application.ExtensionMethods;
 using AnimalService.Domain.Configs;
 using AnimalService.Infrastructure.DAL.Data;
 using AnimalService.Infrastructure.ExtensionMethods;
-using AnimalService.Middlewares;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var builder = WebApplication.CreateBuilder(args);

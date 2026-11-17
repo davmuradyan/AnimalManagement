@@ -5,8 +5,8 @@ using UserService.Application.Interfaces.HashFunctions;
 using UserService.Application.Interfaces.Repositories;
 using UserService.Application.Interfaces.Tokens;
 using UserService.Domain.Configs;
+using UserService.Infrastructure.DAL.Database;
 using UserService.Infrastructure.DAL.Repositories;
-using UserService.Infrastructure.Database;
 using UserService.Infrastructure.Implementations.HashFunctions;
 using UserService.Infrastructure.Implementations.Tokens;
 
@@ -20,12 +20,14 @@ public static class MainExtensions
             options.UseSqlServer(configuration.ConnectionStrings.MainConnectionString));
         
         services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        
         services.AddScoped<IPasswordHashService, BCryptHashService>();
         
         services.AddSingleton(configuration.Jwt);
 
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
         
         return services;
     }

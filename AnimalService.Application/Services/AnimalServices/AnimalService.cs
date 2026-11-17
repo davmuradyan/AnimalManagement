@@ -5,6 +5,7 @@ using AnimalService.Application.Interfaces.Repositories;
 using AnimalService.Domain.Contracts.Dtos;
 using AnimalService.Domain.Contracts.Requests.AnimalRequests;
 using AnimalService.Domain.Entities;
+using AnimalService.Domain.Exceptions.Application;
 using AnimalService.Domain.HelperClasses;
 using AutoMapper;
 using FluentValidation;
@@ -21,7 +22,7 @@ public sealed class AnimalService(
     ITranslationService translationService,
     ILogger<AnimalService> logger) : IAnimalService
 {
-    public async Task<ErrorOr<AnimalDto>> Create(CreateAnimalRequest request)
+    public async Task<AnimalDto> Create(CreateAnimalRequest request)
     {
         // Validation
         var validation = await createAnimalRequestValidator.ValidateAsync(request);
@@ -32,19 +33,14 @@ public sealed class AnimalService(
             {
                 logger.LogError(error.ErrorMessage);
             }
-            return ErrorOr<AnimalDto>.Failure(validation.Errors[0].ErrorMessage, ErrorType.Validation);
+            throw new RequestValidationException(validation.Errors[0].ErrorMessage);
         }
 
         var language = !Enum.IsDefined((Language)request.Language) ? Language.Eng : (Language)request.Language;
+        
         // Main implementation
-
-        var genderColor = await ConvertToGenderAndColor(request.Gender, request.Color, language);
-
-        if (!genderColor.IsSuccess)
-            return ErrorOr<AnimalDto>.Failure(genderColor.Error!, ErrorType.Validation);
-
-        (Gender genderEnum, Color colorEnum) = genderColor.Value;
-
+        (Gender genderEnum, Color colorEnum) = await ConvertToGenderAndColor(request.Gender, request.Color, language);
+        
         var animal = Animal.Create(
             name: request.Name,
             color: colorEnum,
@@ -55,10 +51,10 @@ public sealed class AnimalService(
         await animalRepository.Create(animal);
         
         // Response
-        return ErrorOr<AnimalDto>.Success(mapper.Map<AnimalDto>(animal));
+        return mapper.Map<AnimalDto>(animal);
     }
 
-    public async Task<ErrorOr<List<AnimalDto>>> GetAll(GetAllAnimalsRequest request)
+    public async Task<List<AnimalDto>> GetAll(GetAllAnimalsRequest request)
     {
         // Validation
         var validation = await getAllAnimalsRequestValidator.ValidateAsync(request);
@@ -69,7 +65,7 @@ public sealed class AnimalService(
             {
                 logger.LogError(error.ErrorMessage);
             }
-            return ErrorOr<List<AnimalDto>>.Failure(validation.Errors[0].ErrorMessage, ErrorType.Validation);
+            throw new RequestValidationException(validation.Errors[0].ErrorMessage);
         }
 
         var args = new FilterArgs()
@@ -99,14 +95,15 @@ public sealed class AnimalService(
 
         var result = animals.Select(a =>
         {
+            // TODO: mapper cannot translate
             string gender = a.Gender == 0 ? genders[0].Item2 : genders[1].Item2;
             string color = colors.First(c => c.Item1 == (int)a.Color).Item2;
             return mapper.Map<AnimalDto>(a);
         }).ToList();
-        return ErrorOr<List<AnimalDto>>.Success(result);
+        return result;
     }
 
-    public async Task<ErrorOr<AnimalDto>> Update(UpdateAnimalRequest request)
+    public async Task<AnimalDto> Update(UpdateAnimalRequest request)
     {
         // Validation
         var validation = await updateAnimalRequestValidator.ValidateAsync(request);
@@ -117,48 +114,42 @@ public sealed class AnimalService(
             {
                 logger.LogError(error.ErrorMessage);
             }
-            return ErrorOr<AnimalDto>.Failure(validation.Errors[0].ErrorMessage, ErrorType.Validation);
+            throw new RequestValidationException(validation.Errors[0].ErrorMessage);
         }
 
         var animal = await animalRepository.GetAnimal(request.Id);
 
         if (animal is null)
-            return ErrorOr<AnimalDto>.Failure($"Animal with id {request.Id} doesn't exist.", ErrorType.NotFound);
+            throw new EntityNotFoundException($"Animal with id {request.Id} doesn't exist.");
 
         // Main implementation
         var language = !Enum.IsDefined((Language)request.SelectedLanguage) ? Language.Eng : (Language)request.SelectedLanguage;
 
-        var genderColor = await ConvertToGenderAndColor(request.Gender, request.Color, language);
-
-        if (!genderColor.IsSuccess)
-            return ErrorOr<AnimalDto>.Failure(genderColor.Error!, ErrorType.Validation);
-
-        (Gender genderEnum, Color colorEnum) = genderColor.Value; 
-
+        (Gender genderEnum, Color colorEnum) = await ConvertToGenderAndColor(request.Gender, request.Color, language);
+        
         animal.Update(request.Name, request.Age, request.Weight, genderEnum, colorEnum);
         await animalRepository.Update(animal);
 
         // Response
-        return ErrorOr<AnimalDto>.Success(mapper.Map<AnimalDto>(animal));
+        return mapper.Map<AnimalDto>(animal);
     }
 
-    public async Task<ErrorOr<bool>> SoftDelete(int id)
+    public async Task SoftDelete(int id)
     {
         var animal = await animalRepository.GetAnimal(id);
 
         if (animal is null)
         {
             logger.LogError($"Animal with id {id} doesn't exist.");
-            return ErrorOr<bool>.Failure($"Animal with id {id} doesn't exist.", ErrorType.NotFound);
+            throw new EntityNotFoundException($"Animal with id {id} doesn't exist.");
         }
 
         animal.Close();
 
         await animalRepository.Update(animal);
-        return ErrorOr<bool>.Success(true);
     }
 
-    private async Task<ErrorOr<(Gender, Color)>> ConvertToGenderAndColor(string requestedGender, string requestedColor, Language language)
+    private async Task<(Gender, Color)> ConvertToGenderAndColor(string requestedGender, string requestedColor, Language language)
     {
         if (language != Language.Eng)
         {
@@ -171,20 +162,13 @@ public sealed class AnimalService(
 
         if (!Enum.TryParse(requestedGender, true, out Gender genderEnum) ||
             !Enum.IsDefined(genderEnum))
-        {
-            return ErrorOr<(Gender, Color)>.Failure(
-                $"Invalid gender: {requestedGender}",
-                ErrorType.Validation);
-        }
+            throw new ExternalServiceException("Sorry, something went wrong. We are already working on it!");
 
         if (!Enum.TryParse(requestedColor, true, out Color colorEnum) ||
             !Enum.IsDefined(colorEnum))
-        {
-            return ErrorOr<(Gender, Color)>.Failure(
-                $"Invalid color: {requestedColor}",
-                ErrorType.Validation);
-        }
+            throw new ExternalServiceException("Sorry, something went wrong. We are already working on it!");
 
-        return ErrorOr<(Gender, Color)>.Success((genderEnum, colorEnum));
+
+        return (genderEnum, colorEnum);
     }
 }

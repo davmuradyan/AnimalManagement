@@ -8,4 +8,5 @@ public interface IUserService
 {
     Task<ErrorOr<bool>> CreateUser(CreateUserRequest request);
     Task<ErrorOr<LoginResponse>> Login(LoginRequest request);
+    Task<LoginResponse> RotateRefreshToken(RotateRefreshTokenRequest request);
 }

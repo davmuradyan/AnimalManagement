@@ -1,6 +1,7 @@
 ﻿using AnimalManagement.Shared.Enums;
 using AnimalService.Domain.Entities;
 using AnimalService.Domain.Exceptions;
+using AnimalService.Domain.Exceptions.Domain;
 
 namespace AnimalService.Domain.UnitTests;
 
