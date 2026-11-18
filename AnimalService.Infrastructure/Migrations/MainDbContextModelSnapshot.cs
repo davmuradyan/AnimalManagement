@@ -16,7 +16,7 @@ partial class MainDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261116210924_FixAnimalConstraints";
+    public override string LastMigrationId => "20261118140850_createdByAdded";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -48,6 +48,10 @@ partial class MainDbContextModelSnapshot : ModelSnapshot
                 b.Property<DateTime>("CreatedAt")
                     .HasColumnType("datetime2");
 
+                b.Property<string>("CreatedByUsername")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
                 b.Property<string>("Gender")
                     .IsRequired()
                     .HasColumnType("nvarchar(max)");
@@ -64,6 +68,10 @@ partial class MainDbContextModelSnapshot : ModelSnapshot
 
                 b.Property<DateTime>("UpdatedAt")
                     .HasColumnType("datetime2");
+
+                b.Property<string>("UpdatedByUsername")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
                 b.Property<double>("Weight")
                     .HasColumnType("float");

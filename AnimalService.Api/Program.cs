@@ -16,13 +16,15 @@ if (configuration is null)
     return;
 }
 
-if (Enum.TryParse<LogLevel>(configuration.Logging.LogLevel.Default, out var defaultLogLevel))
+if (!Enum.TryParse<LogLevel>(configuration.Logging.LogLevel.Default, out var defaultLogLevel))
 {
     Console.Error.WriteLine($"Invalid logging level: {defaultLogLevel}");
     return;
 }
 
 builder.Services.AddSingleton(configuration);
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Logging.ClearProviders();
 

@@ -15,6 +15,12 @@ public class AnimalConfiguration : IEntityTypeConfiguration<Animal>
 
         builder.Property(a => a.Name)
             .IsRequired();
+        
+        builder.Property(a => a.CreatedByUsername)
+            .IsRequired();
+        
+        builder.Property(a => a.UpdatedByUsername)
+            .IsRequired();
 
         builder.Property(a => a.Color)
             .HasConversion<string>();

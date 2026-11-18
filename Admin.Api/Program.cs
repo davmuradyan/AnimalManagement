@@ -3,6 +3,7 @@ using Admin.Api.Configs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Yarp.ReverseProxy.Transforms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,8 +27,27 @@ var clusters = configuration.ReverseProxy.Clusters
     })
     .ToList();
 
+
 builder.Services
-    .AddReverseProxy().LoadFromMemory(routes, clusters);
+    .AddReverseProxy().LoadFromMemory(routes, clusters).AddTransforms(builderContext =>
+    {
+        builderContext.AddRequestTransform(context =>
+        {
+            var userId = context.HttpContext.User
+                .FindFirst("sub")?.Value;
+
+            var username = context.HttpContext.User
+                .FindFirst("unique_name")?.Value;
+
+            if (userId is not null)
+                context.ProxyRequest.Headers.Add("X-User-Id", userId);
+
+            if (username is not null)
+                context.ProxyRequest.Headers.Add("X-Username", username);
+
+            return ValueTask.CompletedTask;
+        });
+    });
 
 var jwtSettings = builder.Configuration
     .GetSection("Jwt")

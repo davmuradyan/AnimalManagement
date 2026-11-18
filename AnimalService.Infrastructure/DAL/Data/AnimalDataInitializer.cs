@@ -36,8 +36,8 @@ public class AnimalDataInitializer(IConfiguration configuration)
             x.Age,
             x.Weight,
             Enum.Parse<Gender>(x.Gender, true),
-            Enum.Parse<Color>(x.Color, true)
-        )).ToList();
+            Enum.Parse<Color>(x.Color, true),
+            "D")).ToList();
 
         if (animals.Count == 0)
             return;

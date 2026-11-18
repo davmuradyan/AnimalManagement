@@ -1,10 +1,12 @@
-﻿using AnimalService.Application.Interfaces.ExternalServices;
+﻿using AnimalService.Application.Interfaces;
+using AnimalService.Application.Interfaces.ExternalServices;
 using AnimalService.Application.Interfaces.Repositories;
 using AnimalService.Domain.Configs;
 using AnimalService.Infrastructure.DAL.Data;
 using AnimalService.Infrastructure.DAL.Database;
 using AnimalService.Infrastructure.DAL.Repositories;
 using AnimalService.Infrastructure.ExternalServices;
+using AnimalService.Infrastructure.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,6 +28,8 @@ public static class MainExtensions
         
         services.AddScoped<IAnimalRepository, AnimalRepository>();
 
+        services.AddScoped<ICurrentUser, CurrentUser>();
+        
         services.AddHttpClient<ITranslationService, TranslationServiceClient>(client =>
         {
             client.BaseAddress = new Uri(configuration.Services.TranslationService.BaseUrl);

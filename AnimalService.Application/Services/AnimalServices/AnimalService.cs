@@ -1,6 +1,8 @@
-﻿using AnimalManagement.Shared.Dtos;
+﻿using System.Reflection.Metadata;
+using AnimalManagement.Shared.Dtos;
 using AnimalManagement.Shared.Enums;
 using AnimalManagement.Shared.Exceptions.Application;
+using AnimalService.Application.Interfaces;
 using AnimalService.Application.Interfaces.ExternalServices;
 using AnimalService.Application.Interfaces.Repositories;
 using AnimalService.Domain.Contracts.Dtos;
@@ -21,6 +23,7 @@ public sealed class AnimalService(
     IMapper mapper,
     IAnimalRepository animalRepository,
     ITranslationService translationService,
+    ICurrentUser currentUser,
     ILogger<AnimalService> logger) : IAnimalService
 {
     public async Task<AnimalDto> Create(CreateAnimalRequest request)
@@ -42,12 +45,14 @@ public sealed class AnimalService(
         // Main implementation
         (Gender genderEnum, Color colorEnum) = await ConvertToGenderAndColor(request.Gender, request.Color, language);
         
+        var username = currentUser.Username ?? throw new AuthenticationException("Current user is not available.");
         var animal = Animal.Create(
             name: request.Name,
             color: colorEnum,
             gender: genderEnum,
             age: request.Age,
-            weight: request.Weight);
+            weight: request.Weight,
+            createdByUsername: username);
         
         await animalRepository.Create(animal);
         
@@ -128,7 +133,8 @@ public sealed class AnimalService(
 
         (Gender genderEnum, Color colorEnum) = await ConvertToGenderAndColor(request.Gender, request.Color, language);
         
-        animal.Update(request.Name, request.Age, request.Weight, genderEnum, colorEnum);
+        var username = currentUser.Username ?? throw new AuthenticationException("Current user is not available.");
+        animal.Update(request.Name, request.Age, request.Weight, genderEnum, colorEnum, username);
         await animalRepository.Update(animal);
 
         // Response
@@ -145,7 +151,7 @@ public sealed class AnimalService(
             throw new EntityNotFoundException($"Animal with id {id} doesn't exist.");
         }
 
-        animal.Close();
+        animal.Close(currentUser.Username ?? throw new AuthenticationException("Current user is not available."));
 
         await animalRepository.Update(animal);
     }

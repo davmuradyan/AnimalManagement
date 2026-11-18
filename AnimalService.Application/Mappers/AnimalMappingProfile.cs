@@ -15,14 +15,5 @@ public class AnimalMappingProfile : Profile
                 opt => opt.MapFrom(src => src.Gender.ToString()))
             .ForMember(dest => dest.Color,
                 opt => opt.MapFrom(src => src.Color.ToString()));
-
-        // DTO -> Entity
-        CreateMap<AnimalDto, Animal>().ConstructUsing(src => Animal.Create(
-                src.Name,
-                src.Age,
-                src.Weight,
-                Enum.Parse<Gender>(src.Gender),
-                Enum.Parse<Color>(src.Color)
-            ));
     }
 }

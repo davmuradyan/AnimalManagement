@@ -1,5 +1,5 @@
 @baseUrl = https://localhost:7215
-@token = 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6IjE0NDVkYTNhLTQwZTMtNDliOC1hNTgzLWViZWEzMTJhZGE4OSIsImV4cCI6MTc5NTAxMzU1OSwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.e1pJwbNKc-EIhqwFAQ4-nMMgM4V4v7TlZe1D749wAh0
 
 ### ==========================================
 ### USER SERVICE
