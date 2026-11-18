@@ -6,7 +6,7 @@ namespace UserService.Application.Services.UserServices;
 
 public interface IUserService
 {
-    Task<ErrorOr<bool>> CreateUser(CreateUserRequest request);
-    Task<ErrorOr<LoginResponse>> Login(LoginRequest request);
+    Task CreateUser(CreateUserRequest request);
+    Task<LoginResponse> Login(LoginRequest request);
     Task<LoginResponse> RotateRefreshToken(RotateRefreshTokenRequest request);
 }

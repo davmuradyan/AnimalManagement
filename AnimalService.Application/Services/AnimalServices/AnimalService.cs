@@ -1,5 +1,6 @@
 ﻿using AnimalManagement.Shared.Dtos;
 using AnimalManagement.Shared.Enums;
+using AnimalManagement.Shared.Exceptions.Application;
 using AnimalService.Application.Interfaces.ExternalServices;
 using AnimalService.Application.Interfaces.Repositories;
 using AnimalService.Domain.Contracts.Dtos;

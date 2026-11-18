@@ -1,8 +1,8 @@
-﻿using AnimalService.Infrastructure.Exceptions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using TranslationService.Domain.Entities;
 using TranslationService.Infrastructure.Configurations;
+using TranslationService.Infrastructure.Exceptions;
 
 namespace TranslationService.Infrastructure.Database;
 
@@ -33,19 +33,15 @@ public class MainDbContext(DbContextOptions<MainDbContext> options) : DbContext(
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            throw new CustomConcurrencyException("A concurrency error happened.", ex);
+            throw new CustomConcurrencyException(ex);
         }
         catch (RetryLimitExceededException ex)
         {
-            throw new CustomRetryLimitExceededException("There is a problem with SQL Server.", ex);
+            throw new CustomRetryLimitExceededException(ex);
         }
         catch (DbUpdateException ex)
         {
-            throw new CustomDbUpdateException("An error occurred updating the database", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new CustomException("An error occurred updating the database", ex);
+            throw new CustomDbUpdateException(ex);
         }
     }
 }

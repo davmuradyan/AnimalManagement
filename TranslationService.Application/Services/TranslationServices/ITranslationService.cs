@@ -7,5 +7,5 @@ public interface ITranslationService
 {
     Task<GetEnumTypeTranslationsResponse> GetEnumTypeTranslations(string selectedEnumType, int selectedLanguage);
     Task<int> GetEnumCode(string selectedEnumType, string translation);
-    Task<ErrorOr<GetAllTranslationsResponse>> GetAllTranslations(int language);
+    Task<GetAllTranslationsResponse> GetAllTranslations(int language);
 }

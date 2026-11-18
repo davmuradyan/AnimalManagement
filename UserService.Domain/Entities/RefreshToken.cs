@@ -1,5 +1,5 @@
-﻿using UserService.Domain.Entities.Base;
-using UserService.Domain.Exceptions;
+﻿
+using AnimalManagement.Shared.Exceptions.Domain;
 
 namespace UserService.Domain.Entities;
 
@@ -20,6 +20,9 @@ public class RefreshToken
     {
         if (string.IsNullOrWhiteSpace(tokenHash))
             throw new DomainValidationException("The provided Token Hash was empty.");
+        
+        if (userId < 1)
+            throw new DomainValidationException("The provided UserId was less than 1.");
 
         return new()
         {

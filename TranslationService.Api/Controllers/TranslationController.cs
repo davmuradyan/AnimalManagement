@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TranslationService.Api.ControllerExtensions;
 using TranslationService.Application.Services.TranslationServices;
 
 namespace TranslationService.Api.Controllers;
@@ -8,12 +7,12 @@ namespace TranslationService.Api.Controllers;
 [Route(("api/[controller]"))]
 public class TranslationController(ITranslationService service) : ControllerBase
 {
-    [HttpGet("")]
+    [HttpGet]
     public async Task<IActionResult> GetAllTranslations(int language)
     {
         var result = await service.GetAllTranslations(language);
 
-        return this.ErrorOrConverter(result);
+        return Ok(result);
     }
 
     [HttpGet("{enumType}/translations/{language}")]

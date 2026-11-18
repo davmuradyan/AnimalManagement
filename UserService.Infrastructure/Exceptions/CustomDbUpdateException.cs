@@ -1,14 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Net;
+using AnimalManagement.Shared.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace UserService.Infrastructure.Exceptions;
 
-public class CustomDbUpdateException :  CustomException
-{
-    public CustomDbUpdateException() { }
-
-    public CustomDbUpdateException(string message) : base(message) { }
-
-    public CustomDbUpdateException(
-        string message, DbUpdateException innerException)
-        : base(message, innerException) { }
-}
+public class CustomDbUpdateException(DbUpdateException innerException)
+    :  BaseException("Oops, something went wrong, please retry.", HttpStatusCode.Conflict, ErrorCodes.INTERNAL_SERVER_ERROR, innerException);

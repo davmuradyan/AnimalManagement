@@ -1,5 +1,4 @@
-﻿using AnimalService.Infrastructure.Exceptions;
-using TranslationService.Domain.Exceptions;
+﻿using AnimalManagement.Shared.Exceptions;
 
 namespace TranslationService.Api.Middlewares;
 
@@ -13,67 +12,24 @@ public class ExceptionHandlingMiddleware(
         {
             await next(context);
         }
-        catch (DomainValidationException ex)
+        catch (BaseException ex)
         {
-            logger.LogWarning(ex, "Domain validation failed.");
+            logger.LogWarning(ex, "Application error: {ErrorCode}", ex.ErrorCode);
 
             await WriteErrorResponse(
                 context,
-                StatusCodes.Status400BadRequest,
+                (int)ex.StatusCode,
+                ex.ErrorCode,
                 ex.Message);
-        }
-        catch (CustomConcurrencyException ex)
-        {
-            logger.LogWarning(ex, "Database concurrency conflict.");
-
-            await WriteErrorResponse(
-                context,
-                StatusCodes.Status409Conflict,
-                "The resource was modified by another operation.");
-        }
-        catch (CustomRetryLimitExceededException ex)
-        {
-            logger.LogError(ex, "Database retry limit exceeded.");
-
-            await WriteErrorResponse(
-                context,
-                StatusCodes.Status503ServiceUnavailable,
-                "The database is temporarily unavailable.");
-        }
-        catch (CustomDbUpdateException ex)
-        {
-            logger.LogError(ex, "Database update failed.");
-
-            await WriteErrorResponse(
-                context,
-                StatusCodes.Status500InternalServerError,
-                "An error occurred while updating the database.");
-        }
-        catch (CustomException ex)
-        {
-            logger.LogError(ex, "A custom exception occurred.");
-
-            await WriteErrorResponse(
-                context,
-                StatusCodes.Status500InternalServerError,
-                "An unexpected error occurred.");
-        }
-        catch (NotImplementedException ex)
-        {
-            logger.LogError(ex, "Not implemented exception occurred.");
-            
-            await WriteErrorResponse(
-                context,
-                StatusCodes.Status500InternalServerError,
-                "An unexpected error occurred. Please try again later.");
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "An unhandled exception occurred.");
+            logger.LogError(ex, "Unhandled exception occurred.");
 
             await WriteErrorResponse(
                 context,
                 StatusCodes.Status500InternalServerError,
+                ErrorCodes.INTERNAL_SERVER_ERROR,
                 "An unexpected error occurred. Please try again later.");
         }
     }
@@ -81,17 +37,15 @@ public class ExceptionHandlingMiddleware(
     private static async Task WriteErrorResponse(
         HttpContext context,
         int statusCode,
+        string errorCode,
         string message)
     {
-        if (context.Response.HasStarted)
-            throw new InvalidOperationException(
-                "Cannot modify a response that has already started.");
-
         context.Response.Clear();
         context.Response.StatusCode = statusCode;
 
         await context.Response.WriteAsJsonAsync(new
         {
+            errorCode,
             message
         });
     }

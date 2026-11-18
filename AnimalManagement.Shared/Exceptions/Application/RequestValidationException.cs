@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using AnimalManagement.Shared.Exceptions;
 
 namespace AnimalService.Domain.Exceptions.Application;
 

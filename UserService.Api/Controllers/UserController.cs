@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UserService.Api.ControllerExtensions;
 using UserService.Application.Services.UserServices;
 using UserService.Domain.Contracts.UserRequests;
 
@@ -12,15 +11,15 @@ public class UserController(IUserService service) : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
-        var result = await service.CreateUser(request);
-        return this.ErrorOrConverter(result);
+        await service.CreateUser(request);
+        return Ok();
     }
     
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await service.Login(request);
-        return this.ErrorOrConverter(result);
+        return Ok(result);
     }
 
     [HttpPost("rotate")]

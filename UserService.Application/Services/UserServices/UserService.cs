@@ -1,4 +1,5 @@
-﻿using AnimalManagement.Shared.Dtos;
+﻿using System.Security.Authentication;
+using AnimalService.Domain.Exceptions.Application;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using UserService.Application.Interfaces.HashFunctions;
@@ -19,7 +20,7 @@ public class UserService(IUserRepository userRepository,
     IValidator<LoginRequest> loginRequestValidator,
     ILogger<UserService> logger) : IUserService
 {
-    public async Task<ErrorOr<bool>> CreateUser(CreateUserRequest request)
+    public async Task CreateUser(CreateUserRequest request)
     {
         // Validation
         var validation = await createUserRequestValidator.ValidateAsync(request);
@@ -30,7 +31,7 @@ public class UserService(IUserRepository userRepository,
             {
                 logger.LogError(error.ErrorMessage);
             }
-            return ErrorOr<bool>.Failure(validation.Errors[0].ErrorMessage, ErrorType.Validation);
+            throw new RequestValidationException(validation.Errors[0].ErrorMessage);
         }
 
         // Main implementation
@@ -42,12 +43,9 @@ public class UserService(IUserRepository userRepository,
         
         await userRepository.Create(user);
         logger.LogInformation("User created successfully. Username: {username}", user.Username);
-
-        // Response
-        return ErrorOr<bool>.Success(true);
     }
 
-    public async Task<ErrorOr<LoginResponse>> Login(LoginRequest request)
+    public async Task<LoginResponse> Login(LoginRequest request)
     {
         // Validation
         var validation = await loginRequestValidator.ValidateAsync(request);
@@ -58,7 +56,7 @@ public class UserService(IUserRepository userRepository,
             {
                 logger.LogError(error.ErrorMessage);
             }
-            return ErrorOr<LoginResponse>.Failure(validation.Errors[0].ErrorMessage, ErrorType.Validation);
+            throw new RequestValidationException(validation.Errors[0].ErrorMessage);
         }
 
         // Main implementation
@@ -67,7 +65,7 @@ public class UserService(IUserRepository userRepository,
         if (user is null)
         {
             logger.LogInformation("Failed login attempt. User with \"{username}\" not found.", request.Username);
-            return ErrorOr<LoginResponse>.Failure($"Wrong username or password.", ErrorType.Authentication);
+            throw new AuthenticationException("Wrong username or password.");
         }
 
         var result = passwordHasher.Verify(request.Password, user.PasswordHash);
@@ -75,7 +73,7 @@ public class UserService(IUserRepository userRepository,
         if (!result)
         {
             logger.LogInformation("Failed login attempt with password. Username is \"{username}\".", request.Username);
-            return ErrorOr<LoginResponse>.Failure($"Wrong username or password.", ErrorType.Authentication);
+            throw new AuthenticationException("Wrong username or password.");
         }
 
         var accessToken = jwtTokenGenerator.GenerateToken(user);
@@ -85,25 +83,25 @@ public class UserService(IUserRepository userRepository,
 
         // Response
         var response = new LoginResponse(accessToken, refreshToken);
-        return ErrorOr<LoginResponse>.Success(response);
+        return response;
     }
 
     public async Task<LoginResponse> RotateRefreshToken(RotateRefreshTokenRequest request)
     {
         // Validation
         if (string.IsNullOrWhiteSpace(request.OldRefreshToken))
-            throw new NotImplementedException();
+            throw new RequestValidationException("Old refresh token is required.");
         var oldHashTokenHash = refreshTokenGenerator.Hash(request.OldRefreshToken);
         var oldRefreshTokenEntity = await refreshTokenRepository.Get(oldHashTokenHash);
-        
+
         if (oldRefreshTokenEntity is null)
-            throw new NotImplementedException();
+            throw new AuthenticationException("Something went wrong. Try again later.");
 
         if (oldRefreshTokenEntity.RevokedAt is not null || oldRefreshTokenEntity.ExpiresAt < DateTime.UtcNow)
-            throw new NotImplementedException();
+            throw new AuthenticationException("Something went wrong. Try again later.");
         
         if (oldRefreshTokenEntity.User is null)
-            throw new NotImplementedException();
+            throw new AuthenticationException("Something went wrong. Try again later.");
         
         // Main implementation
         var newRefreshToken = refreshTokenGenerator.Generate();
@@ -113,7 +111,7 @@ public class UserService(IUserRepository userRepository,
         var accessToken = jwtTokenGenerator.GenerateToken(oldRefreshTokenEntity.User);
         var result = await refreshTokenRepository.TryRotate(oldRefreshTokenEntity, newRefreshTokenEntity);
         if (!result)
-            throw new NotImplementedException();
+            throw new AuthenticationException("The refresh token is no longer valid.");
         
         return new LoginResponse(accessToken, newRefreshToken);
     }

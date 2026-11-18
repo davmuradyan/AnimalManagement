@@ -1,6 +1,6 @@
 ﻿using AnimalManagement.Shared.Enums;
+using AnimalManagement.Shared.Exceptions.Domain;
 using AnimalService.Domain.Entities.Base;
-using AnimalService.Domain.Exceptions.Domain;
 
 namespace AnimalService.Domain.Entities;
 

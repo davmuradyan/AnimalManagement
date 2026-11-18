@@ -1,5 +1,5 @@
-﻿using AnimalManagement.Shared.Dtos;
-using AnimalManagement.Shared.Enums;
+﻿using AnimalManagement.Shared.Enums;
+using AnimalService.Domain.Exceptions.Application;
 using Microsoft.Extensions.Logging;
 using TranslationService.Application.Interfaces.Repositories;
 using TranslationService.Domain.Contracts.Responses;
@@ -15,8 +15,7 @@ public class TranslationService(ITranslationRepository translationRepository,
         if (!Enum.IsDefined((Language)selectedLanguage))
         {
             logger.LogError($"Invalid language {selectedLanguage}");
-            ErrorOr<GetAllTranslationsResponse>.Failure($"Selected language {selectedLanguage} is not valid.",
-                ErrorType.Validation);
+            throw new RequestValidationException($"Selected language {selectedLanguage} is not valid.");
         }
 
         Language language = (Language)selectedLanguage;
@@ -24,10 +23,10 @@ public class TranslationService(ITranslationRepository translationRepository,
         if (!Enum.TryParse<TranslationTypes>(selectedEnumType, out var enumType) || !Enum.IsDefined(enumType))
         {
             logger.LogError($"Invalid enum type {selectedEnumType}");
-            ErrorOr<GetAllTranslationsResponse>.Failure($"Selected enum type {selectedEnumType} is not valid.",
-                ErrorType.Validation);
+            throw new RequestValidationException($"Selected enum type {selectedEnumType} is not valid.");
         }
         
+        // Implementation
         var resultFromRepo = await translationRepository.GetEnumTypeTranslations(enumType.ToString(), language);
         
         var result = resultFromRepo.Select(t => new EnumTypeTranslation(t.Item1, t.Item2)).ToList();
@@ -36,25 +35,24 @@ public class TranslationService(ITranslationRepository translationRepository,
 
     public async Task<int> GetEnumCode(string selectedEnumType, string translation)
     {
+        // Verification
         if (!Enum.TryParse<TranslationTypes>(selectedEnumType, out var enumType) || !Enum.IsDefined(enumType))
         {
             logger.LogError($"Invalid enum type {selectedEnumType}");
-            ErrorOr<GetAllTranslationsResponse>.Failure($"Selected enum type {selectedEnumType} is not valid.",
-                ErrorType.Validation);
+            throw new RequestValidationException($"Selected enum type {selectedEnumType} is not valid.");
         }
         
         var result = await translationRepository.GetEnumCode(enumType.ToString(), translation);
         return result;
     }
 
-    public async Task<ErrorOr<GetAllTranslationsResponse>> GetAllTranslations(int selectedLanguage)
+    public async Task<GetAllTranslationsResponse> GetAllTranslations(int selectedLanguage)
     {
         // Validation
         if (!Enum.IsDefined((Language)selectedLanguage))
         {
             logger.LogError($"Invalid language {selectedLanguage}");
-            ErrorOr<GetAllTranslationsResponse>.Failure($"Selected language {selectedLanguage} is not valid.",
-                ErrorType.Validation);
+            throw new RequestValidationException($"Selected language {selectedLanguage} is not valid.");
         }
 
         Language language = (Language)selectedLanguage;
@@ -72,6 +70,6 @@ public class TranslationService(ITranslationRepository translationRepository,
             )
         );
 
-        return ErrorOr<GetAllTranslationsResponse>.Success(responseValue);
+        return responseValue;
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace AnimalService.Domain.Exceptions;
+namespace AnimalManagement.Shared.Exceptions;
 
 public class BaseException(string message, HttpStatusCode statusCode, string errorCode, Exception? innerException = null)
     : ApplicationException(message, innerException)

@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using AnimalManagement.Shared.Enums;
+using AnimalManagement.Shared.Exceptions.Application;
 using AnimalService.Application.Interfaces.ExternalServices;
 using AnimalService.Domain.Contracts.Responses;
 using AnimalService.Domain.Exceptions.Application;

@@ -24,15 +24,15 @@ public class MainDbContext(DbContextOptions<MainDbContext> options) : DbContext(
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            throw new CustomConcurrencyException("Oops, something went wrong, please retry.", ex);
+            throw new CustomConcurrencyException(ex);
         }
         catch (RetryLimitExceededException ex)
         {
-            throw new CustomRetryLimitExceededException("Sorry, something went wrong. We are already working on it!", ex);
+            throw new CustomRetryLimitExceededException(ex);
         }
         catch (DbUpdateException ex)
         {
-            throw new CustomDbUpdateException("Oops, something went wrong, please retry.", ex);
+            throw new CustomDbUpdateException(ex);
         }
     }
 }

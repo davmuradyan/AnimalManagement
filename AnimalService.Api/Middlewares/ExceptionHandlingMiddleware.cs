@@ -1,4 +1,5 @@
-﻿using AnimalService.Domain.Exceptions;
+﻿using AnimalManagement.Shared.Exceptions;
+using AnimalService.Domain.Exceptions;
 
 namespace AnimalService.Api.Middlewares;
 
