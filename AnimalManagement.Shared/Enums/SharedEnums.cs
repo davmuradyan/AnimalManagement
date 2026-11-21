@@ -1,6 +1,6 @@
 ﻿namespace AnimalManagement.Shared.Enums;
 
-public enum TranslationTypes
+public enum TranslationGroups
 {
     Color = 1,
     Gender = 2,
@@ -9,28 +9,21 @@ public enum TranslationTypes
 
 public enum Color
 {
-    Red,
-    Green,
-    Blue,
-    Yellow,
-    Orange,
-    Purple,
-    Pink,
-    Black,
-    White,
-    Brown
+    Red = 1,
+    Green = 2,
+    Blue = 3
 }
 
 public enum Gender
 {
-    Male,
-    Female
+    Male = 1,
+    Female = 2
 }
 
 public enum Language
 {
-    Eng,
-    Hy
+    En = 1,
+    Hy = 2
 }
 
 public enum ErrorCode

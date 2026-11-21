@@ -29,7 +29,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasData(GetSeedData());
     }
 
-    private static User GetSeedData()
+    private User GetSeedData()
     {
         var result = new User
         {

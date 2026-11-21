@@ -8,8 +8,9 @@ namespace TranslationService.Infrastructure.Database;
 
 public class MainDbContext(DbContextOptions<MainDbContext> options) : DbContext(options)
 {
-    public DbSet<EnumTranslation> EnumTranslations { get; set; }
-
+    public DbSet<Translation> Translations { get; set; }
+    public DbSet<Translation> GroupItems { get; set; }
+    public DbSet<Translation> TranslationGroups { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(

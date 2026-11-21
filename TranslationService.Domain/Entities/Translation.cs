@@ -1,10 +1,19 @@
-﻿using TranslationService.Domain.Entities.Base;
+﻿using AnimalManagement.Shared.Enums;
+using TranslationService.Domain.Entities.Base;
 
 namespace TranslationService.Domain.Entities;
 
-public class Translation : BaseEntity
+public sealed class Translation : BaseEntity
 {
     public int GroupItemId { get; set; }
-    public string LanguageCode { get; set; } = string.Empty;
+    public Language LanguageTag { get; set; }
+    public string TranslatedText { get; set; }
     public GroupItem? GroupItemNavigation { get; set; }
+
+    public Translation(int groupItemId, Language languageTag, string translatedText)
+    {
+        GroupItemId = groupItemId;
+        LanguageTag = languageTag;
+        TranslatedText = translatedText;
+    }
 }

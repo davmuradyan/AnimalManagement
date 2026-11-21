@@ -7,44 +7,49 @@ namespace TranslationService.Infrastructure.Repositories;
 
 public class TranslationRepository(MainDbContext context) : ITranslationRepository
 {
-    public async Task<string> Translate(string enumType, int enumValue, Language language)
+    public async Task<List<(int, string)>> GetGroupTranslations(
+        string translationGroup,
+        Language language)
     {
-        var result = await context.EnumTranslations
-            .Where(x => x.EnumType == enumType && language == x.Language)
-            .SingleAsync(t => t.EnumCode == enumValue);
-        
-        return result.Translation;
-    }
-
-    public async Task<List<(int, string)>> GetEnumTypeTranslations(string enumType, Language language)
-    {
-        var entities = await context.EnumTranslations
-            .Where(x => x.EnumType == enumType && language == x.Language)
+        var entities = await context.Translations
+            .Where(t => t.LanguageTag == language)
+            .Where(t => t.GroupItemNavigation!.GroupNavigation!.Name == translationGroup)
+            .Select(t => new
+            {
+                t.GroupItemNavigation!.ItemCode,
+                t.TranslatedText
+            })
             .ToListAsync();
 
-        var result = entities.Select(e => (e.EnumCode, e.Translation)).ToList();
-        return result;
+        return entities
+            .Select(e => (e.ItemCode, e.TranslatedText))
+            .ToList();
     }
-
+    
     public async Task<int> GetEnumCode(string enumType, string translation)
     {
-        var entity = await context.EnumTranslations
-            .SingleAsync(x => x.EnumType == enumType && translation == x.Translation);
-
-        return entity.EnumCode;
+        var entity = await context.Translations
+            .Include(t => t.GroupItemNavigation)
+            .SingleAsync(t => t.TranslatedText == translation);
+            
+    
+        return entity.GroupItemNavigation!.ItemCode;
     }
-
+    
     public async Task<Dictionary<string, List<(int, string)>>> GetAllEnumTypes(Language language)
     {
-        var translations = await context.EnumTranslations
-            .Where(x => x.Language == language)
-            .GroupBy(x => x.EnumType)
+        return await context.Translations
+            .Where(t => t.LanguageTag == language)
+            .Include(t => t.GroupItemNavigation)
+            .ThenInclude(g => g!.GroupNavigation)
+            .GroupBy(x => x.GroupItemNavigation!.GroupNavigation!.Name)
             .ToDictionaryAsync(
                 group => group.Key,
                 group => group
-                    .Select(x => (x.EnumCode, x.Translation))
+                    .Select(x => (
+                        x.GroupItemNavigation!.ItemCode,
+                        x.TranslatedText
+                    ))
                     .ToList());
-
-        return translations;
     }
 }

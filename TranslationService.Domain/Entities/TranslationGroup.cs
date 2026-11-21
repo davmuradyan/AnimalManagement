@@ -2,10 +2,16 @@
 
 namespace TranslationService.Domain.Entities;
 
-public class TranslationGroup : BaseEntity
+public sealed class TranslationGroup : BaseEntity
 {
-    public string Name { get; set; } = string.Empty;
-    public bool IsCustom { get; set; } = false;
+    public string Name { get; set; }
+    public bool IsCustom { get; set; }
     
-    public List<GroupItem> GroupItems { get; set; } = new List<GroupItem>();
+    public List<GroupItem> GroupItems { get; set; } = new();
+
+    public TranslationGroup(string name, bool isCustom)
+    {
+        Name = name;
+        IsCustom = isCustom;
+    }
 }

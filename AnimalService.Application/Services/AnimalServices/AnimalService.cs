@@ -37,7 +37,7 @@ public sealed class AnimalService(
             throw new RequestValidationException(validation.Errors[0].ErrorMessage);
         }
 
-        var language = !Enum.IsDefined((Language)request.Language) ? Language.Eng : (Language)request.Language;
+        var language = !Enum.IsDefined((Language)request.Language) ? Language.En : (Language)request.Language;
 
         // Main implementation
         (Gender genderEnum, Color colorEnum) = await ConvertToGenderAndColor(request.Gender, request.Color, language);
@@ -89,7 +89,7 @@ public sealed class AnimalService(
             pageSize: request.PageSize,
             args: args);
         
-        var language = !Enum.IsDefined((Language)request.Language) ? Language.Eng : (Language)request.Language;
+        var language = !Enum.IsDefined((Language)request.Language) ? Language.En : (Language)request.Language;
 
         var colors = await translationService.GetEnumTypeTranslations(nameof(Color), language);
         var genders = await translationService.GetEnumTypeTranslations(nameof(Gender), language);
@@ -129,7 +129,7 @@ public sealed class AnimalService(
 
         // Main implementation
         var language = !Enum.IsDefined((Language)request.SelectedLanguage)
-            ? Language.Eng
+            ? Language.En
             : (Language)request.SelectedLanguage;
 
         (Gender genderEnum, Color colorEnum) =
@@ -168,7 +168,7 @@ public sealed class AnimalService(
 
     private async Task<(Gender, Color)> ConvertToGenderAndColor(string requestedGender, string requestedColor, Language language)
     {
-        if (language != Language.Eng)
+        if (language != Language.En)
         {
             requestedGender = ((Gender)await translationService
                 .GetEnumCode(nameof(Gender), requestedGender)).ToString();

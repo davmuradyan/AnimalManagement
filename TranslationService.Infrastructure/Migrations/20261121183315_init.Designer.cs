@@ -12,8 +12,8 @@ using TranslationService.Infrastructure.Database;
 namespace TranslationService.Infrastructure.Migrations;
 
 [DbContext(typeof(MainDbContext))]
-[Migration("20261115171413_init")]
-partial class _20261115171413_init
+[Migration("20261121183315_init")]
+partial class _20261121183315_init
 {
     /// <inheritdoc />
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ partial class _20261115171413_init
 
         SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-        modelBuilder.Entity("TranslationService.Domain.Entities.EnumTranslation", b =>
+        modelBuilder.Entity("TranslationService.Domain.Entities.GroupItem", b =>
             {
                 var id = b.Property<int>("Id")
                     .ValueGeneratedOnAdd()
@@ -39,14 +39,273 @@ partial class _20261115171413_init
                 b.Property<DateTime>("CreatedAt")
                     .HasColumnType("datetime2");
 
-                b.Property<int>("EnumCode")
+                b.Property<int>("GroupId")
                     .HasColumnType("int");
 
-                b.Property<string>("EnumType")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(450)");
+                b.Property<int>("ItemCode")
+                    .HasColumnType("int");
 
-                b.Property<string>("Language")
+                b.Property<byte[]>("RowVersion")
+                    .IsConcurrencyToken()
+                    .IsRequired()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("rowversion");
+
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
+
+                b.HasKey("Id");
+
+                b.HasIndex("GroupId");
+
+                b.ToTable("GroupItem");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupId = 1,
+                        ItemCode = 1,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 2,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupId = 1,
+                        ItemCode = 2,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 3,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupId = 1,
+                        ItemCode = 3,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 4,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupId = 2,
+                        ItemCode = 1,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 5,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupId = 2,
+                        ItemCode = 2,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 6,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupId = 3,
+                        ItemCode = 1,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 7,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupId = 3,
+                        ItemCode = 2,
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    });
+            });
+
+        modelBuilder.Entity("TranslationService.Domain.Entities.Translation", b =>
+            {
+                var id = b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
+
+                b.Property<DateTime?>("ClosedDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("GroupItemId")
+                    .HasColumnType("int");
+
+                b.Property<string>("LanguageTag")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<byte[]>("RowVersion")
+                    .IsConcurrencyToken()
+                    .IsRequired()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("rowversion");
+
+                b.Property<string>("TranslatedText")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
+
+                b.HasKey("Id");
+
+                b.HasIndex("GroupItemId");
+
+                b.ToTable("Translation");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 1,
+                        LanguageTag = "En",
+                        TranslatedText = "Red",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 2,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 1,
+                        LanguageTag = "Hy",
+                        TranslatedText = "Կարմիր",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 3,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 2,
+                        LanguageTag = "En",
+                        TranslatedText = "Green",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 4,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 2,
+                        LanguageTag = "Hy",
+                        TranslatedText = "Կանաչ",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 5,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 3,
+                        LanguageTag = "En",
+                        TranslatedText = "Blue",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 6,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 3,
+                        LanguageTag = "Hy",
+                        TranslatedText = "Կապույտ",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 7,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 4,
+                        LanguageTag = "En",
+                        TranslatedText = "Male",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 8,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 4,
+                        LanguageTag = "Hy",
+                        TranslatedText = "Արու",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 9,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 5,
+                        LanguageTag = "En",
+                        TranslatedText = "Female",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 10,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 5,
+                        LanguageTag = "Hy",
+                        TranslatedText = "Էգ",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 11,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 6,
+                        LanguageTag = "En",
+                        TranslatedText = "English",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 12,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 6,
+                        LanguageTag = "Hy",
+                        TranslatedText = "Անգլերեն",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 13,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 7,
+                        LanguageTag = "En",
+                        TranslatedText = "Armenian",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    },
+                    new
+                    {
+                        Id = 14,
+                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                        GroupItemId = 7,
+                        LanguageTag = "Hy",
+                        TranslatedText = "Հայերեն",
+                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                    });
+            });
+
+        modelBuilder.Entity("TranslationService.Domain.Entities.TranslationGroup", b =>
+            {
+                var id = b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
+
+                b.Property<DateTime?>("ClosedDate")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<bool>("IsCustom")
+                    .HasColumnType("bit");
+
+                b.Property<string>("Name")
                     .IsRequired()
                     .HasColumnType("nvarchar(450)");
 
@@ -56,261 +315,73 @@ partial class _20261115171413_init
                     .ValueGeneratedOnAddOrUpdate()
                     .HasColumnType("rowversion");
 
-                b.Property<string>("Translation")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
-
                 b.Property<DateTime>("UpdatedAt")
                     .HasColumnType("datetime2");
 
                 b.HasKey("Id");
 
-                b.HasIndex("EnumType", "EnumCode", "Language")
+                b.HasIndex("Name")
                     .IsUnique();
 
-                b.ToTable("EnumTranslations");
+                b.ToTable("TranslationGroup");
 
                 b.HasData(
                     new
                     {
                         Id = 1,
                         CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 0,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Red",
+                        IsCustom = false,
+                        Name = "Color",
                         UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                     },
                     new
                     {
                         Id = 2,
                         CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 0,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Կարմիր",
+                        IsCustom = false,
+                        Name = "Gender",
                         UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                     },
                     new
                     {
                         Id = 3,
                         CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 1,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Green",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 4,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 1,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Կանաչ",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 5,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 2,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Blue",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 6,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 2,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Կապույտ",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 7,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 3,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Yellow",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 8,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 3,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Դեղին",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 9,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 4,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Orange",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 10,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 4,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Նարնջագույն",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 11,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 5,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Purple",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 12,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 5,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Մանուշակագույն",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 13,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 6,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Pink",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 14,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 6,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Վարդագույն",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 15,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 7,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Black",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 16,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 7,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Սև",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 17,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 8,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "White",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 18,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 8,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Սպիտակ",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 19,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 9,
-                        EnumType = "Color",
-                        Language = "Eng",
-                        Translation = "Brown",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 20,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 9,
-                        EnumType = "Color",
-                        Language = "Hy",
-                        Translation = "Շագանակագույն",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 21,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 0,
-                        EnumType = "Gender",
-                        Language = "Eng",
-                        Translation = "Male",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 22,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 0,
-                        EnumType = "Gender",
-                        Language = "Hy",
-                        Translation = "Արու",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 23,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 1,
-                        EnumType = "Gender",
-                        Language = "Eng",
-                        Translation = "Female",
-                        UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                    },
-                    new
-                    {
-                        Id = 24,
-                        CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                        EnumCode = 1,
-                        EnumType = "Gender",
-                        Language = "Hy",
-                        Translation = "Էգ",
+                        IsCustom = false,
+                        Name = "Language",
                         UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                     });
+            });
+
+        modelBuilder.Entity("TranslationService.Domain.Entities.GroupItem", b =>
+            {
+                b.HasOne("TranslationService.Domain.Entities.TranslationGroup", "GroupNavigation")
+                    .WithMany("GroupItems")
+                    .HasForeignKey("GroupId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("GroupNavigation");
+            });
+
+        modelBuilder.Entity("TranslationService.Domain.Entities.Translation", b =>
+            {
+                b.HasOne("TranslationService.Domain.Entities.GroupItem", "GroupItemNavigation")
+                    .WithMany("Translations")
+                    .HasForeignKey("GroupItemId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("GroupItemNavigation");
+            });
+
+        modelBuilder.Entity("TranslationService.Domain.Entities.GroupItem", b =>
+            {
+                b.Navigation("Translations");
+            });
+
+        modelBuilder.Entity("TranslationService.Domain.Entities.TranslationGroup", b =>
+            {
+                b.Navigation("GroupItems");
             });
 #pragma warning restore 612, 618
     }
