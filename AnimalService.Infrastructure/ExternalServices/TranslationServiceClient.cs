@@ -17,7 +17,7 @@ public sealed class TranslationServiceClient(HttpClient httpClient) : ITranslati
         {
             var escapedEnumType = System.Uri.EscapeDataString(enumType);
 
-            var url = $"api/v1/translation/{escapedEnumType}/translations/{(int)language}";
+            var url = $"api/translation/{escapedEnumType}/translations/{(int)language}";
 
             var response = await httpClient.GetFromJsonAsync<GetEnumTypeTranslationsResponse>(
                 url,
@@ -48,7 +48,7 @@ public sealed class TranslationServiceClient(HttpClient httpClient) : ITranslati
         try
         {
             return await httpClient.GetFromJsonAsync<int>(
-                $"api/v1/translation/{Uri.EscapeDataString(enumType)}/code?translation={Uri.EscapeDataString(translation)}",
+                $"api/translation/{Uri.EscapeDataString(enumType)}/code?translation={Uri.EscapeDataString(translation)}",
                 cancellationToken);
         }
         catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException)

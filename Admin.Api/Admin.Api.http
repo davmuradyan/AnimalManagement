@@ -1,12 +1,12 @@
 @baseUrl = https://localhost:7215
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6IjBjNTNiYWFjLWEyODAtNGFmYi1hMGU1LWNlZjYwNjdjOTAyOCIsImV4cCI6MTc5NTI4ODYwNiwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.TOyE_Fjas1ijbtv1NYtXQ6KVgoZRAY9j23hLoF-dnPo
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6ImIwZTRlYWZkLWZjNzktNDgxOC04Mjg4LTE5ZDBmMzAzYWNiYyIsImV4cCI6MTc5NTI4OTU4NCwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.C9zJm_Uh3dukQEzT82Tqhapu1LwAU3ErByQShomeeqc
 
 ### ==========================================
 ### USER SERVICE
 ### ==========================================
 
 ### 1. Register
-POST {{baseUrl}}/api/v1/user/register
+POST {{baseUrl}}/api/user/register
 Content-Type: application/json
 
 {
@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### 3. Rotate
-POST {{baseUrl}}/api/v1/User/rotate
+POST {{baseUrl}}/api/User/rotate
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ### 4. GetAll
-GET {{baseUrl}}/api/v1/User/
+GET {{baseUrl}}/api/User/
 Authorization: Bearer {{token}}
 
 ### ==========================================
@@ -48,35 +48,36 @@ Content-Type: application/json
 
 {
   "name": "Lizard",
-  "age": 4,
-  "weight": 43.5,
+  "age": 1,
+  "weight": 0.2,
   "gender": "Female",
-  "color": "Black",
+  "color": "Green",
   "Language": 0
 }
 
 ### 4. Get all animals
-GET {{baseUrl}}/api/v1/animal?Page=1&PageSize=10&Count=10&Language=1
+GET {{baseUrl}}/api/animal?Page=1&PageSize=10&Count=10&Language=1
 Authorization: Bearer {{token}}
 
 ### 5. Update animal
-PUT {{baseUrl}}/api/v1/animal
+PUT {{baseUrl}}/api/animal
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
   "id": 1,
-  "name": "Buddy",
+  "name": "Lizard",
   "age": 5,
-  "weight": 18.5,
-  "color": "Brown",
+  "weight": 0.5,
+  "color": "Blue",
   "gender": "Male",
-  "selectedLanguage": 0
+  "selectedLanguage": 0,
+  "rowVersion": "AAAAAAAAB9E="
 }
 
 
 ### 6. Soft delete animal
-DELETE {{baseUrl}}/api/v1/animal/1/soft
+DELETE {{baseUrl}}/api/animal/1/soft
 Authorization: Bearer {{token}}
 
 ### ==========================================
