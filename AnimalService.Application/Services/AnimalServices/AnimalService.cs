@@ -36,16 +36,10 @@ public sealed class AnimalService(
             }
             throw new RequestValidationException(validation.Errors[0].ErrorMessage);
         }
-
-        var language = !Enum.IsDefined((Language)request.Language) ? Language.En : (Language)request.Language;
-
+        
         // Main implementation
-        (Gender genderEnum, Color colorEnum) = await ConvertToGenderAndColor(request.Gender, request.Color, language);
-
         var username = currentUser.Username ?? throw new CustomAuthenticationException("Current user is not available.");
         var animal = mapper.Map<Animal>(request);
-        animal.Gender = genderEnum;
-        animal.Color = colorEnum;
         animal.CreatedByUsername = username;
         animal.UpdatedByUsername = username;
 
@@ -89,20 +83,7 @@ public sealed class AnimalService(
             pageSize: request.PageSize,
             args: args);
         
-        var language = !Enum.IsDefined((Language)request.Language) ? Language.En : (Language)request.Language;
-
-        var colors = await translationService.GetEnumTypeTranslations(nameof(Color), language);
-        var genders = await translationService.GetEnumTypeTranslations(nameof(Gender), language);
-
-        var result = animals.Select(a =>
-        {
-            var dto = mapper.Map<AnimalDto>(a);
-
-            dto.Gender = genders.First(g => g.Item1 == (int)a.Gender).Item2;
-            dto.Color = colors.First(c => c.Item1 == (int)a.Color).Item2;
-
-            return dto;
-        }).ToList();
+        var result = animals.Select(mapper.Map<AnimalDto>).ToList();
         return result;
     }
 
@@ -128,20 +109,13 @@ public sealed class AnimalService(
         animalRepository.SetOriginalRowVersion(animal, request.RowVersion);
 
         // Main implementation
-        var language = !Enum.IsDefined((Language)request.SelectedLanguage)
-            ? Language.En
-            : (Language)request.SelectedLanguage;
-
-        (Gender genderEnum, Color colorEnum) =
-            await ConvertToGenderAndColor(request.Gender, request.Color, language);
-
         var username = currentUser.Username ?? throw new CustomAuthenticationException("Current user is not available.");
         
         animal.Name = request.Name;
         animal.Age = request.Age;
         animal.Weight = request.Weight;
-        animal.Gender = genderEnum;
-        animal.Color = colorEnum;
+        animal.Gender = (Gender)request.Gender;
+        animal.Color = (Color)request.Color;
         animal.UpdatedByUsername = username;
         animal.UpdatedAt = DateTime.UtcNow;
 
@@ -164,26 +138,5 @@ public sealed class AnimalService(
         
         animal.Close(updatedBy);
         await animalRepository.Update(animal);
-    }
-
-    private async Task<(Gender, Color)> ConvertToGenderAndColor(string requestedGender, string requestedColor, Language language)
-    {
-        if (language != Language.En)
-        {
-            requestedGender = ((Gender)await translationService
-                .GetEnumCode(nameof(Gender), requestedGender)).ToString();
-
-            requestedColor = ((Color)await translationService
-                .GetEnumCode(nameof(Color), requestedColor)).ToString();
-        }
-
-        if (!Enum.TryParse(requestedGender, true, out Gender genderEnum) || !Enum.IsDefined(genderEnum))
-            throw new ExternalServiceException("Sorry, something went wrong. We are already working on it!");
-
-        if (!Enum.TryParse(requestedColor, true, out Color colorEnum) || !Enum.IsDefined(colorEnum))
-            throw new ExternalServiceException("Sorry, something went wrong. We are already working on it!");
-
-
-        return (genderEnum, colorEnum);
     }
 }

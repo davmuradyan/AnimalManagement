@@ -12,5 +12,4 @@ public record GetAllAnimalsRequest
     public double? MinWeight { get; init; }
     public double? MaxWeight { get; init; }
     public string? Gender { get; init; }
-    public int Language { get; init; }
 }

@@ -15,14 +15,16 @@ public class AnimalMappingProfile : Profile
             .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
             .ForMember(d => d.Age, o => o.MapFrom(s => s.Age))
             .ForMember(d => d.Weight, o => o.MapFrom(s => s.Weight))
-            .ForMember(d => d.Gender, o => o.MapFrom(s => s.Gender.ToString()))
-            .ForMember(d => d.Color, o => o.MapFrom(s => s.Color.ToString()))
+            .ForMember(d => d.Gender, o => o.MapFrom(s => s.Gender))
+            .ForMember(d => d.Color, o => o.MapFrom(s => s.Color))
             .ForMember(d => d.RowVersion, o => o.MapFrom(s => s.RowVersion));
 
         CreateMap<CreateAnimalRequest, Animal>()
             .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
             .ForMember(d => d.Age, o => o.MapFrom(s => s.Age))
-            .ForMember(d => d.Weight, o => o.MapFrom(s => s.Weight));
+            .ForMember(d => d.Weight, o => o.MapFrom(s => s.Weight))
+            .ForMember(d => d.Gender, o => o.MapFrom(s => s.Gender))
+            .ForMember(d => d.Color, o => o.MapFrom(s => s.Color));
 
     }
 }

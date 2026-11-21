@@ -1,5 +1,5 @@
 @baseUrl = https://localhost:7215
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6ImIwZTRlYWZkLWZjNzktNDgxOC04Mjg4LTE5ZDBmMzAzYWNiYyIsImV4cCI6MTc5NTI4OTU4NCwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.C9zJm_Uh3dukQEzT82Tqhapu1LwAU3ErByQShomeeqc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6ImMwNmRmZTdiLWEzNjYtNGRhYy1hNjM1LWUwYmRmMzkzOGFjZiIsImV4cCI6MTc5NTI5MTA4NSwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.S7IPB93Jqj3liJOLMYgyhvvoLKWzLYmILApgcyDxZso
 
 ### ==========================================
 ### USER SERVICE
@@ -50,9 +50,8 @@ Content-Type: application/json
   "name": "Lizard",
   "age": 1,
   "weight": 0.2,
-  "gender": "Female",
-  "color": "Green",
-  "Language": 0
+  "gender": 2,
+  "color": 1
 }
 
 ### 4. Get all animals
@@ -65,14 +64,13 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "id": 1,
+  "id": 2,
   "name": "Lizard",
   "age": 5,
   "weight": 0.5,
-  "color": "Blue",
-  "gender": "Male",
-  "selectedLanguage": 0,
-  "rowVersion": "AAAAAAAAB9E="
+  "color": 3,
+  "gender": 1,
+  "rowVersion": "AAAAAAAAB9Q="
 }
 
 

@@ -26,14 +26,12 @@ public class UpdateAnimalRequestValidator : AbstractValidator<UpdateAnimalReques
 
         RuleFor(x => x.Gender)
             .NotEmpty()
-            .Must(x => Enum.TryParse<Gender>(x, true, out var value)
-                       && Enum.IsDefined(value))
+            .Must(x => Enum.IsDefined((Gender)x))
             .WithMessage("Gender must be a valid gender.");
 
         RuleFor(x => x.Color)
             .NotEmpty()
-            .Must(x => Enum.TryParse<Color>(x, true, out var value)
-                       && Enum.IsDefined(value))
+            .Must(x => Enum.IsDefined((Color)x))
             .WithMessage("Color must be a valid color.");
     }
 }
