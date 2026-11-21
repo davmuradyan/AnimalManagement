@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using TranslationService.Application.Services.TranslationServices;
 
 namespace TranslationService.Api.Controllers;
@@ -8,6 +9,7 @@ namespace TranslationService.Api.Controllers;
 public class TranslationController(ITranslationService service) : ControllerBase
 {
     [HttpGet]
+    [ApiVersion("1.0")]
     public async Task<IActionResult> GetAllTranslations(int language)
     {
         var result = await service.GetAllTranslations(language);
@@ -16,6 +18,7 @@ public class TranslationController(ITranslationService service) : ControllerBase
     }
 
     [HttpGet("{enumType}/translations/{language}")]
+    [ApiVersion("1.0")]
     public async Task<IActionResult> GetEnumTypeTranslations(
         string enumType, int language)
     {
@@ -24,6 +27,7 @@ public class TranslationController(ITranslationService service) : ControllerBase
     }
 
     [HttpGet("{enumType}/code")]
+    [ApiVersion("1.0")]
     public async Task<IActionResult> GetEnumCode(string enumType, [FromQuery] string translation)
     {
         var result = await service.GetEnumCode(enumType, translation);

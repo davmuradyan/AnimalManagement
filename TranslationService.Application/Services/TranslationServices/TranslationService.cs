@@ -1,5 +1,5 @@
 ﻿using AnimalManagement.Shared.Enums;
-using AnimalService.Domain.Exceptions.Application;
+using AnimalManagement.Shared.Exceptions.Application;
 using Microsoft.Extensions.Logging;
 using TranslationService.Application.Interfaces.Repositories;
 using TranslationService.Domain.Contracts.Responses;

@@ -1,4 +1,5 @@
-﻿using AnimalManagement.Shared.Exceptions;
+﻿using AnimalManagement.Shared.Enums;
+using AnimalManagement.Shared.Exceptions;
 
 namespace UserService.Api.Middlewares;
 
@@ -29,7 +30,7 @@ public class ExceptionHandlingMiddleware(
             await WriteErrorResponse(
                 context,
                 StatusCodes.Status500InternalServerError,
-                ErrorCodes.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_SERVER_ERROR.ToString(),
                 "An unexpected error occurred. Please try again later.");
         }
     }

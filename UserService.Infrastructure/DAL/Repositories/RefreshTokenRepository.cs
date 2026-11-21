@@ -33,7 +33,7 @@ public class RefreshTokenRepository(MainDbContext context) : IRefreshTokenReposi
     {
         try
         {
-            RefreshToken.Revoke(oldToken);
+            oldToken.RevokedAt = DateTime.UtcNow;
             await context.RefreshTokens.AddAsync(newToken);
             context.RefreshTokens.Update(oldToken);
             await context.SaveChangesAsync();

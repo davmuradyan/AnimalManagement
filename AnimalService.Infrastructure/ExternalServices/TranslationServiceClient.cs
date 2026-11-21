@@ -3,7 +3,6 @@ using AnimalManagement.Shared.Enums;
 using AnimalManagement.Shared.Exceptions.Application;
 using AnimalService.Application.Interfaces.ExternalServices;
 using AnimalService.Domain.Contracts.Responses;
-using AnimalService.Domain.Exceptions.Application;
 
 namespace AnimalService.Infrastructure.ExternalServices;
 
@@ -16,8 +15,12 @@ public sealed class TranslationServiceClient(HttpClient httpClient) : ITranslati
     {
         try
         {
+            var escapedEnumType = System.Uri.EscapeDataString(enumType);
+
+            var url = $"api/v1/translation/{escapedEnumType}/translations/{(int)language}";
+
             var response = await httpClient.GetFromJsonAsync<GetEnumTypeTranslationsResponse>(
-                $"api/translation/{Uri.EscapeDataString(enumType)}/translations/{(int)language}",
+                url,
                 cancellationToken);
 
             if (response is null)
@@ -45,7 +48,7 @@ public sealed class TranslationServiceClient(HttpClient httpClient) : ITranslati
         try
         {
             return await httpClient.GetFromJsonAsync<int>(
-                $"api/translation/{Uri.EscapeDataString(enumType)}/code?translation={Uri.EscapeDataString(translation)}",
+                $"api/v1/translation/{Uri.EscapeDataString(enumType)}/code?translation={Uri.EscapeDataString(translation)}",
                 cancellationToken);
         }
         catch (Exception ex) when (ex is HttpRequestException or OperationCanceledException)

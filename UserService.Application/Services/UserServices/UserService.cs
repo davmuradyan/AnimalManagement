@@ -1,10 +1,11 @@
 ﻿using System.Security.Authentication;
-using AnimalService.Domain.Exceptions.Application;
+using AnimalManagement.Shared.Exceptions.Application;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using UserService.Application.Interfaces.HashFunctions;
 using UserService.Application.Interfaces.Repositories;
 using UserService.Application.Interfaces.Tokens;
+using UserService.Domain.Contracts.Dtos;
 using UserService.Domain.Contracts.UserRequests;
 using UserService.Domain.Contracts.UserResponses;
 using UserService.Domain.Entities;
@@ -20,7 +21,7 @@ public class UserService(IUserRepository userRepository,
     IValidator<LoginRequest> loginRequestValidator,
     ILogger<UserService> logger) : IUserService
 {
-    public async Task CreateUser(CreateUserRequest request)
+    public async Task CreateUserAsync(CreateUserRequest request)
     {
         // Validation
         var validation = await createUserRequestValidator.ValidateAsync(request);
@@ -35,17 +36,19 @@ public class UserService(IUserRepository userRepository,
         }
 
         // Main implementation
-        var user = User.Create(
-            request.Name,
-            request.Surname,
-            request.Username,
-            passwordHasher.Hash(request.Password));
+        var user = new User
+        {
+            Name = request.Name,
+            Surname = request.Surname,
+            Username = request.Username,
+            PasswordHash = passwordHasher.Hash(request.Password)
+        };
         
         await userRepository.Create(user);
         logger.LogInformation("User created successfully. Username: {username}", user.Username);
     }
 
-    public async Task<LoginResponse> Login(LoginRequest request)
+    public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         // Validation
         var validation = await loginRequestValidator.ValidateAsync(request);
@@ -79,14 +82,19 @@ public class UserService(IUserRepository userRepository,
         var accessToken = jwtTokenGenerator.GenerateToken(user);
         var refreshToken = refreshTokenGenerator.Generate();
         var refreshTokenHash = refreshTokenGenerator.Hash(refreshToken);
-        await refreshTokenRepository.Create(RefreshToken.Create(refreshTokenHash, user.Id));
+        var rt = new RefreshToken
+        {
+            TokenHash = refreshTokenHash,
+            UserId = user.Id,
+        };
+        await refreshTokenRepository.Create(rt);
 
         // Response
         var response = new LoginResponse(accessToken, refreshToken);
         return response;
     }
 
-    public async Task<LoginResponse> RotateRefreshToken(RotateRefreshTokenRequest request)
+    public async Task<LoginResponse> RotateRefreshTokenAsync(RotateRefreshTokenRequest request)
     {
         // Validation
         if (string.IsNullOrWhiteSpace(request.OldRefreshToken))
@@ -106,13 +114,34 @@ public class UserService(IUserRepository userRepository,
         // Main implementation
         var newRefreshToken = refreshTokenGenerator.Generate();
         var newRefreshTokenHash = refreshTokenGenerator.Hash(newRefreshToken);
-        var newRefreshTokenEntity = RefreshToken.Create(newRefreshTokenHash, oldRefreshTokenEntity.UserId);
-
+        var rt = new RefreshToken
+        {
+            TokenHash = newRefreshTokenHash,
+            UserId = oldRefreshTokenEntity.User.Id,
+        };
         var accessToken = jwtTokenGenerator.GenerateToken(oldRefreshTokenEntity.User);
-        var result = await refreshTokenRepository.TryRotate(oldRefreshTokenEntity, newRefreshTokenEntity);
+        var result = await refreshTokenRepository.TryRotate(oldRefreshTokenEntity, rt);
         if (!result)
-            throw new AuthenticationException("The refresh token is no longer valid.");
+            throw new CustomAuthenticationException("The refresh token is no longer valid.");
         
         return new LoginResponse(accessToken, newRefreshToken);
+    }
+
+    public async Task<GetAllUsersResult> GetAllUsersAsync(string username)
+    {
+        // Username validation
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            logger.LogWarning("Username was not found. {u}", username);
+            throw new CustomAuthenticationException("Something went wrong. Please, log out and log in.");
+        }
+
+        var users = await userRepository.GetAll();
+        var filteredUsers = users.Where(u => u.Username != username).ToList();
+        var resultList = filteredUsers.Select(u => new UserDto(u.Id, u.Name, u.Surname, u.Username, u.RowVersion))
+            .ToList();
+
+        var result = new GetAllUsersResult(resultList);
+        return result;
     }
 }

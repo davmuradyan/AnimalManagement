@@ -9,5 +9,6 @@ public interface IAnimalRepository
     Task<Animal?> GetAnimal(int animalId);
     Task<List<Animal>> GetAll(int pageNumber, int pageSize, FilterArgs args);
     Task Update(Animal animal);
+    void SetOriginalRowVersion(Animal animal, byte[] rowVersion);
     Task Delete(Animal animal);
 }

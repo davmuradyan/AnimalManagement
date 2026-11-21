@@ -2,13 +2,9 @@
 
 namespace AnimalManagement.Shared.Logging;
 
-public class FileLogger(
-    string category,
-    FileLogWriter writer,
-    LogLevel minimumLevel) : ILogger
+public class FileLogger(string category, FileLogWriter writer, LogLevel minimumLevel) : ILogger
 {
-    public IDisposable? BeginScope<TState>(TState state)
-        where TState : notnull
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull
     {
         return null;
     }

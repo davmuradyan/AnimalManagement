@@ -21,17 +21,13 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
             .Must(x => x.All(c =>
                 char.IsLetterOrDigit(c) || c is '-' or '_' or '.'))
             .WithMessage("Username can contain only letters, numbers, \"-\", \"_\" and \".\" characters.");
-
+        
         RuleFor(x => x.Password)
-            .NotEmpty()
-            .WithMessage("Password is required.")
-            .MinimumLength(12)
-            .WithMessage("Password must be at least 12 characters long.")
-            .Must(x => x.Any(char.IsUpper))
-            .Must(x => x.Any(char.IsLower))
-            .Must(x => x.Any(char.IsDigit))
-            .Must(x => x.Any(c => !char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c)))
-            .WithMessage(
-                "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character.");
+            .NotEmpty().WithMessage("Password is required.")
+            .MinimumLength(12).WithMessage("Password must be at least 12 characters long.")
+            .Matches(@"\p{Lu}").WithMessage("Password must contain an uppercase letter.")
+            .Matches(@"\p{Ll}").WithMessage("Password must contain a lowercase letter.")
+            .Matches(@"\d").WithMessage("Password must contain a number.")
+            .Matches(@"[^\p{L}\d\s]").WithMessage("Password must contain a special character.");
     }
 }

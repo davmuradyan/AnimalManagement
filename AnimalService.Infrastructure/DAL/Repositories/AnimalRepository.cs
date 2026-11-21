@@ -67,6 +67,13 @@ public class AnimalRepository(MainDbContext context) : IAnimalRepository
     {
         await context.SaveChangesAsync();
     }
+    
+    public void SetOriginalRowVersion(Animal animal, byte[] rowVersion)
+    {
+        context.Entry(animal)
+            .Property(a => a.RowVersion)
+            .OriginalValue = rowVersion;
+    }
 
     public async Task Delete(Animal animal)
     {

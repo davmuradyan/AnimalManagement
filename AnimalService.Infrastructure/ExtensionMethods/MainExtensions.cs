@@ -2,7 +2,6 @@
 using AnimalService.Application.Interfaces.ExternalServices;
 using AnimalService.Application.Interfaces.Repositories;
 using AnimalService.Domain.Configs;
-using AnimalService.Infrastructure.DAL.Data;
 using AnimalService.Infrastructure.DAL.Database;
 using AnimalService.Infrastructure.DAL.Repositories;
 using AnimalService.Infrastructure.ExternalServices;
@@ -23,8 +22,6 @@ public static class MainExtensions
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(10),
                     errorNumbersToAdd: null)));
-
-        services.AddScoped<AnimalDataInitializer>();
         
         services.AddScoped<IAnimalRepository, AnimalRepository>();
 

@@ -22,7 +22,7 @@
   },
   {
     "name": "Goat",
-    "age": 3,
+    "age": -3,
     "weight": 55,
     "gender": "Male",
     "color": "Black"

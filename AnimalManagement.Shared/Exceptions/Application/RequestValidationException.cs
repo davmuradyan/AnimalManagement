@@ -1,7 +1,6 @@
 ﻿using System.Net;
-using AnimalManagement.Shared.Exceptions;
 
-namespace AnimalService.Domain.Exceptions.Application;
+namespace AnimalManagement.Shared.Exceptions.Application;
 
 public class RequestValidationException(string message)
-    : BaseException(message, HttpStatusCode.BadRequest, ErrorCodes.REQUEST_VALIDATION_ERROR);
+    : BaseException(message, HttpStatusCode.BadRequest, Enums.ErrorCode.REQUEST_VALIDATION_ERROR.ToString());

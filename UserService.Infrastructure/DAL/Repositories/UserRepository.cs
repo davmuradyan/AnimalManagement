@@ -25,9 +25,10 @@ public class UserRepository(MainDbContext context) : IUserRepository
         return user;
     }
 
-    public Task<List<User>> GetAll()
+    public async Task<List<User>> GetAll()
     {
-        throw new NotImplementedException();
+        var result = await context.Users.ToListAsync();
+        return result;
     }
 
     public async Task Update(User user)

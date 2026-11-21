@@ -1,4 +1,5 @@
 using AnimalManagement.Shared.Logging;
+using Asp.Versioning;
 using TranslationService.Api.Middlewares;
 using TranslationService.Application.ExtensionMethods;
 using TranslationService.Domain.Configs;
@@ -14,7 +15,7 @@ if (configuration is null)
     return;
 }
 
-if (Enum.TryParse<LogLevel>(configuration.Logging.LogLevel.Default, out var defaultLogLevel))
+if (!Enum.TryParse<LogLevel>(configuration.Logging.LogLevel.Default, out var defaultLogLevel))
 {
     Console.Error.WriteLine($"Invalid logging level: {defaultLogLevel}");
     return;
@@ -36,6 +37,14 @@ builder.Services.AddOpenApi();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(configuration);
 builder.Services.AddControllers();
+
+builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+    })
+    .AddMvc();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

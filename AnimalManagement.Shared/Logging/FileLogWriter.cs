@@ -33,8 +33,7 @@ public class FileLogWriter : IDisposable
         {
             try
             {
-                Console.Error.WriteLine(
-                    $"File logging failed: {ex.Message}\nOriginal log: {message}");
+                Console.Error.WriteLine($"File logging failed: {ex.Message}\nOriginal log: {message}");
             }
             catch
             {

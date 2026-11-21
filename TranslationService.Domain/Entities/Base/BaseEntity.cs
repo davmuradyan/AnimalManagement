@@ -3,8 +3,13 @@
 public abstract class BaseEntity
 {
     public int Id { get; set; }
-    public DateTime CreatedAt { get; protected init; }
-    public DateTime UpdatedAt { get; protected set; }
-    public DateTime? ClosedDate { get; protected set; }
+    public DateTime CreatedAt { get; init; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } =  DateTime.Now;
+    public DateTime? ClosedDate { get; set; }
     public byte[] RowVersion { get; set; } = null!;
+
+    public void Close()
+    {
+        ClosedDate = DateTime.Now;
+    }
 }

@@ -11,10 +11,7 @@ public class FileLoggerProvider(
 
     public ILogger CreateLogger(string categoryName)
     {
-        return new FileLogger(
-            categoryName,
-            _writer,
-            minimumLevel);
+        return new FileLogger(categoryName, _writer, minimumLevel);
     }
 
     public void Dispose()

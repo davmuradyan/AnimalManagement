@@ -1,23 +1,23 @@
 @baseUrl = https://localhost:7215
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6IjE0NDVkYTNhLTQwZTMtNDliOC1hNTgzLWViZWEzMTJhZGE4OSIsImV4cCI6MTc5NTAxMzU1OSwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.e1pJwbNKc-EIhqwFAQ4-nMMgM4V4v7TlZe1D749wAh0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwidW5pcXVlX25hbWUiOiJ0ZXN0dXNlciIsImp0aSI6IjZhZWQwOGRmLThkZGMtNDhiZi04NmM0LTFlMmVmMzVlNzkyNiIsImV4cCI6MTc5NTI3NzA2MCwiaXNzIjoiQW5pbWFsTWFuYWdlbWVudC5Vc2VyU2VydmljZSIsImF1ZCI6IkFuaW1hbE1hbmFnZW1lbnQuQXBpIn0.aY1iv07j3nfAkfGNIcvwNsR-5ZjUxWYl8aNjYrQOWow
 
 ### ==========================================
 ### USER SERVICE
 ### ==========================================
 
 ### 1. Register
-POST {{baseUrl}}/api/user/register
+POST {{baseUrl}}/api/v1/user/register
 Content-Type: application/json
 
 {
   "name": "Hayk",
   "surname": "Adamyan",
-  "username": "hayk-arca",
+  "username": "lilit-muradyan",
   "password": "TestPassword123!"
 }
 
 ### 2. Login
-POST {{baseUrl}}/api/user/login
+POST {{baseUrl}}/api/v1/user/login
 Content-Type: application/json
 
 {
@@ -26,12 +26,16 @@ Content-Type: application/json
 }
 
 ### 3. Rotate
-POST {{baseUrl}}/api/User/rotate
+POST {{baseUrl}}/api/v1/User/rotate
 Content-Type: application/json
 
 {
-  "oldRefreshToken": "OLhPgq0NN8VnudApzsGEISzVI3+fCVAmVEXZYq2Z19+DZrYZxkjAwMgd/uAGWLu75Vr7geqMQJ1X81rN0QL0L+1Jxc3Rs3GG/1EpU+JIl3n+JR08dBvnKixm/KeEYW6t/R/wrygsWB5UIrsI1hyKj6rlUoMqj1VplB8qSAZ9OFG7PSmtrVeLcY724+dyrzy6QPk+YTVhpYmLeVeGSjB/XY+GG6+9FeTDWphD4hijgpDTOF3YsFtwVlfY7plikj+1hyIqDybPPxYRRTHY593Fb9gpNflQDWruAGm5h9cBtIxOuO4FFHHGPCqZJ3+GarYR4A626V2iy5qtrOQpzMT2zAyoeuUu+/N+NFDWdGPZdPYmbMW8koaA5cm4PHZbFmxfDm41AwkRZiLM8sSO8V4kWL7EjUfW2P0K0Rq4ChadUe2xlTN2DX+vEe0+QGFyjpqHl6SplcXUGaD5QkfxhUOTz3syE3QKY3LuhbDjYrOYnBWQtzc6AOM69z3tkRcqvEnfhBZ0B836J8NWWYkQxqZ9Vr++sA/duLyVEm3J0z/qxCUBmEtb82PhvFwRfJfpQxIZWTwSTk4VgkW4rP7dYjKfn3oq0pqhtnnHFpjmousKyAGnlnKZQcLqbYMuQ9g53q9Sjf2yol91/Hvr9GvD2AntPkfooosZfXVUeUBeIj+REtd6OHTQqxlOAlofSi6ye8Y6DhkCEQORDQU5I2hK6ICtSn8Enc1HX1ljTF9FHLs9qOF6r7hVDaMJUxQqVRmJgrG02JqHihaE8ugzF7y+qnS2IQ6OQLxWUNkLfEY5vwuWxJZMkq/JXGaeA7HMzLl5uzuIWOdV7LeQXuCOafG0TmTjsDRfYXJj7rzjlWi81BGfc3SldbG2nMoIRr1fIQuV8ZlGvkg6A0VKq0+8fdkfStJ9uAtqgeDr3wDrEoC2iDRtDa4VDTnTtz+5pxXByW4BtWlEGbyTQnMymI1dIQuIRre0LM+MRcW2ZsgBhBk3jeLxXeW6lh81NAmqXijQ6B2AQn6pYJMu7gv7e3Gg+jSATOrKutJCRM6BnNJL0zbdPJUW3N9Td0iSyldcPqIUI5IACSIS/89MsoTw9WT0hJvuuaE0o/gJcXxUhT/OG1F1KNzRTVHus33yP7Ol0hcIV7dXBaAKjIJFY5VI4VOyfVxIBXxr2j4EsBiejzm3lYwxbUMBy0vid3FLbNsUH6LiNSJtZH8PEkBbtzLM+6ffzlKmPESk2pTwJduHEi9/g30R347msYvXL+2BnfCJDqcvxXTOZKrB7FPG3zsUH/48cabgNvAqGDdlA/E+8t2eOpo9p5vnzKW05YUQWbZUEtM0kdL8We78uoWkyEitBnuVnwLgFT6s4A=="
+  "oldRefreshToken": "+++GarYR4A626V2iy5qtrOQpzMT2zAyoeuUu+/N+NFDWdGPZdPYmbMW8koaA5cm4PHZbFmxfDm41AwkRZiLM8sSO8V4kWL7EjUfW2P0K0Rq4ChadUe2xlTN2DX+vEe0+QGFyjpqHl6SplcXUGaD5QkfxhUOTz3syE3QKY3LuhbDjYrOYnBWQtzc6AOM69z3tkRcqvEnfhBZ0B836J8NWWYkQxqZ9Vr++sA/duLyVEm3J0z/qxCUBmEtb82PhvFwRfJfpQxIZWTwSTk4VgkW4rP7dYjKfn3oq0pqhtnnHFpjmousKyAGnlnKZQcLqbYMuQ9g53q9Sjf2yol91/Hvr9GvD2AntPkfooosZfXVUeUBeIj+REtd6OHTQqxlOAlofSi6ye8Y6DhkCEQORDQU5I2hK6ICtSn8Enc1HX1ljTF9FHLs9qOF6r7hVDaMJUxQqVRmJgrG02JqHihaE8ugzF7y+qnS2IQ6OQLxWUNkLfEY5vwuWxJZMkq/JXGaeA7HMzLl5uzuIWOdV7LeQXuCOafG0TmTjsDRfYXJj7rzjlWi81BGfc3SldbG2nMoIRr1fIQuV8ZlGvkg6A0VKq0+8fdkfStJ9uAtqgeDr3wDrEoC2iDRtDa4VDTnTtz+5pxXByW4BtWlEGbyTQnMymI1dIQuIRre0LM+MRcW2ZsgBhBk3jeLxXeW6lh81NAmqXijQ6B2AQn6pYJMu7gv7e3Gg+jSATOrKutJCRM6BnNJL0zbdPJUW3N9Td0iSyldcPqIUI5IACSIS/89MsoTw9WT0hJvuuaE0o/gJcXxUhT/OG1F1KNzRTVHus33yP7Ol0hcIV7dXBaAKjIJFY5VI4VOyfVxIBXxr2j4EsBiejzm3lYwxbUMBy0vid3FLbNsUH6LiNSJtZH8PEkBbtzLM+6ffzlKmPESk2pTwJduHEi9/g30R347msYvXL+2BnfCJDqcvxXTOZKrB7FPG3zsUH/48cabgNvAqGDdlA/E+8t2eOpo9p5vnzKW05YUQWbZUEtM0kdL8We78uoWkyEitBnuVnwLgFT6s4A=="
 }
+
+### 4. GetAll
+GET {{baseUrl}}/api/v1/User/
+Authorization: Bearer {{token}}
 
 ### ==========================================
 ### ANIMAL SERVICE
@@ -43,20 +47,20 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Ship",
-  "age": 12,
+  "name": "Lizard",
+  "age": 4,
   "weight": 43.5,
   "gender": "Female",
-  "color": "White",
+  "color": "Black",
   "Language": 0
 }
 
 ### 4. Get all animals
-GET {{baseUrl}}/api/animal?Page=1&PageSize=10&Count=10&Language=1
+GET {{baseUrl}}/api/v1/animal?Page=1&PageSize=10&Count=10&Language=1
 Authorization: Bearer {{token}}
 
 ### 5. Update animal
-PUT {{baseUrl}}/api/animal
+PUT {{baseUrl}}/api/v1/animal
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -72,7 +76,7 @@ Content-Type: application/json
 
 
 ### 6. Soft delete animal
-DELETE {{baseUrl}}/api/animal/1/soft
+DELETE {{baseUrl}}/api/v1/animal/1/soft
 Authorization: Bearer {{token}}
 
 ### ==========================================
@@ -80,13 +84,13 @@ Authorization: Bearer {{token}}
 ### ==========================================
 
 ### 7. Get all translations for a language
-GET {{baseUrl}}/api/translation?language=0
+GET {{baseUrl}}/api/v1/translation?language=0
 Authorization: Bearer {{token}}
 
 ### 8. Get translations for a specific enum type
-GET {{baseUrl}}/api/translation/Language/translations/0
+GET {{baseUrl}}/api/v1/translation/Language/translations/0
 Authorization: Bearer {{token}}
 
 ### 9. Get enum code by translation
-GET {{baseUrl}}/api/translation/Language/code?translation=Armenian
+GET {{baseUrl}}/api/v1/translation/Language/code?translation=Armenian
 Authorization: Bearer {{token}}

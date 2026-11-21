@@ -2,8 +2,8 @@ using AnimalManagement.Shared.Logging;
 using AnimalService.Api.Middlewares;
 using AnimalService.Application.ExtensionMethods;
 using AnimalService.Domain.Configs;
-using AnimalService.Infrastructure.DAL.Data;
 using AnimalService.Infrastructure.ExtensionMethods;
+using Asp.Versioning;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,18 +43,18 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(configuration);
 builder.Services.AddControllers();
 
+builder.Services.AddApiVersioning(options =>
+    {
+        options.DefaultApiVersion = new ApiVersion(1, 0);
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+    })
+    .AddMvc();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-await using (var scope = app.Services.CreateAsyncScope())
-{
-    var initializer = scope.ServiceProvider
-        .GetRequiredService<AnimalDataInitializer>();
-
-    await initializer.InitializeAsync();
-}
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
