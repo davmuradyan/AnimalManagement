@@ -17,8 +17,8 @@ public class GetAllAnimalsRequestValidator : AbstractValidator<GetAllAnimalsRequ
             .WithMessage("Page size must be greater than zero.");
 
         RuleFor(r => r.Count)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Count cannot be negative.");
+            .GreaterThan(0)
+            .WithMessage("Count cannot be non-positive.");
 
         RuleFor(r => r.MinAge)
             .GreaterThanOrEqualTo(0)

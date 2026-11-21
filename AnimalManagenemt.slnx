@@ -9,8 +9,7 @@
     <Project Path="AnimalService.Infrastructure/AnimalService.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/AnimalService/tests/">
-    <Project Path="AnimalService.Domain.UnitTests/AnimalService.Domain.UnitTests.csproj" />
-    <Project Path="AnimalService.Infrastructure.IntegrationTests/AnimalService.Infrastructure.IntegrationTests.csproj" />
+    <Project Path="AnimalService.Tests/AnimalService.Tests.csproj" />
   </Folder>
   <Folder Name="/Shared/">
     <Project Path="AnimalManagement.Shared/AnimalManagement.Shared.csproj" />

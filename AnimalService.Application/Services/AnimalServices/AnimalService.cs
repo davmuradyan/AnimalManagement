@@ -1,7 +1,6 @@
 ﻿using AnimalManagement.Shared.Enums;
 using AnimalManagement.Shared.Exceptions.Application;
 using AnimalService.Application.Interfaces;
-using AnimalService.Application.Interfaces.ExternalServices;
 using AnimalService.Application.Interfaces.Repositories;
 using AnimalService.Domain.Contracts.Dtos;
 using AnimalService.Domain.Contracts.Requests.AnimalRequests;
@@ -19,7 +18,6 @@ public sealed class AnimalService(
     IValidator<UpdateAnimalRequest> updateAnimalRequestValidator,
     IMapper mapper,
     IAnimalRepository animalRepository,
-    ITranslationService translationService,
     ICurrentUser currentUser,
     ILogger<AnimalService> logger) : IAnimalService
 {

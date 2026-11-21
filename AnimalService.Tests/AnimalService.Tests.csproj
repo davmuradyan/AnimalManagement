@@ -19,7 +19,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AnimalService.Domain\AnimalService.Domain.csproj" />
+      <ProjectReference Include="..\AnimalService.Application\AnimalService.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="IntegrationTests\" />
     </ItemGroup>
 
 </Project>
