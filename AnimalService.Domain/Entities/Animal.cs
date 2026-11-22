@@ -1,5 +1,4 @@
 ﻿using AnimalManagement.Shared.Enums;
-using AnimalService.Domain.Contracts.Requests.AnimalRequests;
 using AnimalService.Domain.Entities.Base;
 
 namespace AnimalService.Domain.Entities;
