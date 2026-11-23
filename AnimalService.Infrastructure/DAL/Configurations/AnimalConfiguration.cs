@@ -36,5 +36,7 @@ public class AnimalConfiguration : IEntityTypeConfiguration<Animal>
 
         builder.Property(a => a.RowVersion)
             .IsRowVersion();
+        
+        builder.HasQueryFilter(a => a.ClosedDate == null);
     }
 }

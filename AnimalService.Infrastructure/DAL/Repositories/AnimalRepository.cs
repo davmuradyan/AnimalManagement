@@ -14,12 +14,6 @@ public class AnimalRepository(MainDbContext context) : IAnimalRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<List<Animal>> GetAll()
-    {
-        var result = context.Animals.AsQueryable();
-        return await result.ToListAsync();
-    }
-
     public async Task<List<Animal>> GetAll(
         int pageNumber, 
         int pageSize, 
